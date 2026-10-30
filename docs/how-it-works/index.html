@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>How the Delivery Core Works</title>
-<meta name="description" content="The agentic delivery core: three layers, one run step by step, its vocabulary, gates and terminal states, and agentic-eds as one swappable platform pack.">
+<title>Delivery Core Concept</title>
+<meta name="description" content="The agentic delivery core in one page: a fixed route of isolated stages, scripts that decide, a model that only does the work, a person at three gates, and platform packs that plug in without the core knowing their name.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: Delivery Factory reference page, same dark world as the part pages: navy ground, spectrum accents,
+/* Layout: Delivery Factory concept page, same dark world as the part pages: navy ground, spectrum accents,
    square edges. Two parts: the platform-independent core, then one platform pack as the worked example.
    Wide figures scroll inside their own frame; the page itself never scrolls sideways. */
 :root {
@@ -126,10 +126,6 @@ h3 { margin: 0 0 .35rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -
 .layer.mod .n { color: var(--violet); }
 .layer p { color: var(--muted); font-size: .97rem; margin-bottom: .7rem; }
 .layer p:last-child { margin-bottom: 0; }
-.layer .items { font: .78rem/1.75 var(--mono); color: var(--dim); }
-.boundary { margin: 1.6rem 0 0; padding: 1.1rem 1.3rem; background: var(--navy-2); border-left: 3px solid var(--violet); max-width: 72ch; }
-.boundary blockquote { margin: .6rem 0 0; font: .9rem/1.6 var(--mono); color: var(--code-fg); }
-.boundary p { margin: 0; color: var(--muted); }
 
 /* figures */
 .shot { margin: 0; }
@@ -147,7 +143,6 @@ h3 { margin: 0 0 .35rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -
 .sw { width: 22px; height: 12px; border: 1.5px solid; flex: none; }
 .sw.det { border-color: var(--cyan); background: rgba(85, 232, 255, .1); }
 .sw.mod { border-color: var(--violet); background: rgba(185, 140, 255, .12); }
-.sw.ref { border-color: var(--dim); border-style: dashed; }
 .sw.br { border-color: var(--amber); border-style: dashed; background: rgba(255, 207, 110, .08); }
 
 /* vocabulary */
@@ -166,8 +161,14 @@ h3 { margin: 0 0 .35rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -
 pre.envelope { margin: 0; padding: 1.2rem 1.3rem; background: var(--navy-2); border: 1px solid rgba(85, 232, 255, .3);
   color: var(--code-fg); font: .9rem/1.7 var(--mono); overflow-x: auto; }
 pre.envelope .k { color: var(--cyan); }
-pre.envelope .c { color: var(--dim); }
 .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: start; }
+
+/* the five ideas */
+.ideas { margin: clamp(1.8rem, 3vw, 2.4rem) 0 0; padding: 1.2rem 1.4rem; border-left: 3px solid var(--cyan);
+  background: rgba(85, 232, 255, .06); max-width: 72ch; }
+.ideas ol { margin: 0; padding-left: 1.4rem; }
+.ideas li { margin: .35rem 0; color: var(--ink); font-size: 1.05rem; line-height: 1.5; }
+.ideas-label { margin: 0 0 .4rem; color: var(--cyan); font: .78rem/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
 
 /* terminal states */
 .ends { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 1.4rem; }
@@ -179,22 +180,7 @@ pre.envelope .c { color: var(--dim); }
 .ends p { margin: 0 0 .5rem; color: var(--muted); font-size: .95rem; }
 .ends p:last-child { margin: 0; }
 
-/* rejected alternatives */
-.chapters { margin: 0; padding: 0; list-style: none; }
-.chapter { display: grid; grid-template-columns: minmax(150px, .28fr) minmax(0, 1fr); gap: clamp(1rem, 4vw, 3rem);
-  padding: 1.3rem 0; border-top: 1px solid var(--line); }
-.chapter-marker { margin: .2rem 0 0; color: var(--red); font: .8rem/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-.chapter p { margin: 0 0 .6rem; max-width: var(--measure); color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
-.chapter p:last-child { margin: 0; }
 
-/* EDS pack details */
-.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
-.cards > div { background: var(--navy); padding: 1.4rem 1.3rem; }
-.cards .tag { display: block; margin-bottom: .6rem; color: var(--cyan); font: .74rem/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
-.cards p { margin: 0 0 .6rem; color: var(--muted); font-size: .96rem; }
-.cards p:last-child { margin: 0; }
-.budgets { margin: .2rem 0 0; padding: 0; list-style: none; font: .86rem/1.9 var(--mono); color: var(--code-fg); }
-.budgets b { color: var(--cyan); font-weight: 500; }
 
 .site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
   padding: 2.2rem var(--space-page, 0); color: var(--muted); background: var(--footer, transparent); border-top: 1px solid var(--line-strong, var(--line));
@@ -209,13 +195,12 @@ pre.envelope .c { color: var(--dim); }
 .page-note p { margin: 0 0 .5rem; max-width: 80ch; }
 
 @media (max-width: 960px) {
-  .layers, .cards, .ends { grid-template-columns: minmax(0, 1fr); }
+  .layers, .ends { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 860px) {
   .section-head, .two { grid-template-columns: minmax(0, 1fr); }
   .section-head > p:last-child { margin-top: 1.2rem; }
   .proof { grid-template-columns: minmax(0, 1fr); }
-  .chapter { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
   .pairs-head { display: none; }
   .pair { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
   .pair > div:last-child { padding-left: .8rem; border-left: 2px solid var(--line-strong); }
@@ -234,15 +219,13 @@ pre.envelope .c { color: var(--dim); }
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Delivery Factory · How it works</a>
+  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Delivery Factory · Core concept</a>
   <nav class="site-nav" aria-label="Sections">
-    <a href="#problem">The problem</a>
-    <a href="#guidance">Guidance</a>
+    <a href="#idea">The idea</a>
     <a href="#layers">Three layers</a>
     <a href="#run">One run</a>
     <a href="#vocabulary">Vocabulary</a>
-    <a href="#ends">Gates and ends</a>
-    <a href="#rejected">Rejected</a>
+    <a href="#guidance">Guidance</a>
     <a href="#eds">The EDS pack</a>
   </nav>
 </header>
@@ -250,9 +233,9 @@ pre.envelope .c { color: var(--dim); }
 <main id="top">
   <section class="hero">
     <div class="hero-glow" aria-hidden="true"></div>
-    <p class="eyebrow">Delivery Factory · Reference</p>
-    <h1>How the delivery core <em>works</em>.</h1>
-    <p class="lede">A work item goes in, a pull request comes out. This page explains the machinery in between: what is plain code, where a model is needed, what one run does step by step, and how a platform plugs in without the core knowing its name. Repo: <a class="pl" href="https://github.com/agenticDraft/plugins">github.com/agenticDraft/plugins</a></p>
+    <p class="eyebrow">Delivery Factory · Concept</p>
+    <h1>Delivery core <em>concept</em>.</h1>
+    <p class="lede">A work item goes in, a pull request comes out. This page explains the idea in between: what is plain code, where a model is needed, and how a platform plugs in without the core knowing its name. Repo: <a class="pl" href="https://github.com/agenticDraft/plugins">github.com/agenticDraft/plugins</a></p>
     <div class="proof">
       <p class="proof-label">Built as plugins</p>
       <p>Six Claude Code plugins. <a class="pl" href="https://github.com/agenticDraft/plugins/tree/main/plugins/agentic-core"><code>agentic-core</code></a> drives the route and names no product. One <em>platform pack</em>, <a class="pl" href="https://github.com/agenticDraft/plugins/tree/main/plugins/agentic-eds"><code>agentic-eds</code></a>, says what each stage means for an Edge Delivery project. Four <em>provider packs</em> each fill one role: <code>agentic-jira</code> (tracker), <code>agentic-github</code> (scm), <code>agentic-figma</code> (design), <code>agentic-playwright</code> (browser).</p>
@@ -265,264 +248,163 @@ pre.envelope .c { color: var(--dim); }
     <p>Everything in this part holds for any platform. The core defines the stages, the roles and the shapes; it never names a tracker, a design tool or a framework.</p>
   </div>
 
-  <section class="section" id="problem">
+  <section class="section" id="idea">
     <div class="section-head">
       <p class="eyebrow">What it is</p>
       <h2>One command per <em>ticket</em></h2>
-      <p>The starting point was a checklist done by hand, and the quality bar lived in a document, not in the loop.</p>
+      <p>Done by hand, delivering a ticket is a checklist. Done by one long prompt, it drifts.</p>
     </div>
     <div class="prose">
-      <p>A developer read the ticket, wrote the block, started the local preview, compared the page against a design screenshot by eye, opened a pull request and pasted a screenshot back into the ticket. Done by hand, that is a checklist. Done by one long prompt, it drifts: the agent re-does work, carries every file it ever read, and nobody can say which step decided what.</p>
-      <p>The core replaces it with one command, <code>/agentic-core:run-route &lt;item&gt;</code>. It reads the item, plans, builds, renders, compares against the design, lints, and stops for a human at the decisions that matter. The run is a fixed route of fifteen stages. Each stage runs as its own isolated agent and reports back in five lines.</p>
+      <p>One long prompt re-does work, carries every file it ever read, and nobody can say which step decided what. The core replaces it with one command, <code>/agentic-core:run-route &lt;item&gt;</code>. It reads the item, plans, builds, renders, compares against the design, lints, and stops for a human at the decisions that matter.</p>
     </div>
-    <p class="claim">The core sequences, spawns, reads one verdict and branches. Everything that names a platform or a product lives in a pack.</p>
-  </section>
-
-  <section class="section alt" id="guidance">
-    <div class="section-head">
-      <p class="eyebrow">Design against published guidance</p>
-      <h2>How it lines up with <em>Anthropic's</em> advice</h2>
-      <p>A predictable route in code, deterministic checks before any model, isolated stages, and a person at the decisions that matter. Each row pairs a design decision with the guidance it matches.</p>
-    </div>
-    <div class="pairs">
-      <div class="pairs-head"><span>What the core does</span><span>What the guidance says</span></div>
-      <div class="pair"><div><strong>A fixed route of fifteen stages.</strong> Each stage's <code>when:</code> condition is evaluated once, after <code>intake</code>; the model never decides which stage comes next.</div><div>Use a workflow, a predefined code path, when the task is predictable. Start with the simplest pattern that works and add autonomy only where it pays for itself.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a></span></div></div>
-      <div class="pair"><div><strong>Deterministic checks before any model review.</strong> Contract validators run first and cost nothing; a reviewing model sees only what survives. Classification logic lives in scripts the skills call.</div><div>Grade with code first and with a model only where code cannot decide. Put logic into tools rather than into prompt text.<span class="src"><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals</a> · <a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing tools for agents</a></span></div></div>
-      <div class="pair"><div><strong>One isolated subagent per stage.</strong> Every stage adapter runs with <code>context: fork</code>; the driver's context grows by one envelope per stage, never by what a stage read.</div><div>A subagent works in its own context window and hands back a condensed result. Context is a finite resource to be spent deliberately.<span class="src"><a href="https://www.anthropic.com/engineering/multi-agent-research-system">Multi-agent research system</a> · <a href="https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools">Context engineering</a></span></div></div>
-      <div class="pair"><div><strong>Fix loops with budgets.</strong> A stage may edit only as many times as its <code>fix_attempts</code> allows, asks <code>check-fix-budget.sh</code> before every edit, and stops early when an edit brings no improvement.</div><div>The evaluator-optimizer loop: one step produces, another evaluates, with an explicit stopping condition so the loop cannot run on.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a></span></div></div>
-      <div class="pair"><div><strong>The human decides.</strong> Three gates, a <code>question</code> verdict asked only at a stage boundary, and a driver that never retries a stage on its own.</div><div>Give the agent checkpoints where it pauses for human feedback, and keep a person in the loop for decisions that are costly to get wrong.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a></span></div></div>
-      <div class="pair"><div><strong>Guardrails enforced by the host, not the prompt.</strong> Headless runs use <code>dontAsk</code>, a tool allowlist, a <code>PreToolUse</code> hook that also covers subagents, a locked network allowlist, a write-protected plugin directory, and caps on turns, time and budget. Gates are checked by a tree snapshot before and after.</div><div>Layer the defenses and make the application enforce its limits, so that a manipulated model still cannot act outside them.<span class="src"><a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks">Mitigate jailbreaks and prompt injections</a></span></div></div>
-      <div class="pair"><div><strong>Work items are untrusted input.</strong> <code>intake</code> sanitizes the item before anything acts on it, the <code>external-content-safety</code> contract covers what stages read, and an open poisoning finding blocks the run before a branch exists.</div><div>Indirect prompt injection arrives through content the agent reads, such as tickets, documents and tool results. Treat that content as data, never as instructions.<span class="src"><a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks">Mitigate jailbreaks and prompt injections</a></span></div></div>
-      <div class="pair"><div><strong>Parallel fan-out only where the parts are independent.</strong> The EDS pack's <code>conventions</code> stage runs three subagents (styles, markup, component reuse) and synthesizes one artifact.</div><div>Parallelization and orchestrator-workers fit tasks that split into independent parts; tasks with heavy shared context fit them poorly.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a> · <a href="https://www.anthropic.com/engineering/multi-agent-research-system">Multi-agent research system</a></span></div></div>
-      <div class="pair"><div><strong>A small, closed tool vocabulary.</strong> Four roles with named operations (<code>tracker.fetch_item</code>, <code>scm.create_branch</code>, <code>browser.render</code>, …), and every operation returns the same envelope.</div><div>Design tools for agents: fewer, consolidated tools with clear namespacing and responses that carry only meaningful context.<span class="src"><a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing tools for agents</a></span></div></div>
-      <div class="pair"><div><strong>Durable state and per-run cost.</strong> <code>run-state.json</code> resumes a run within two hours; <code>analytics.md</code> records peak context and billed input for the run and each subagent.</div><div>Agents carry state across long runs, so they need to resume from the point of failure rather than restart; multi-agent systems spend many more tokens than a chat, so cost has to be measured.<span class="src"><a href="https://www.anthropic.com/engineering/multi-agent-research-system">Multi-agent research system</a></span></div></div>
+    <div class="ideas">
+      <p class="ideas-label">If you read only this</p>
+      <ol>
+      <li>A ticket goes in, a pull request comes out, from one command.</li>
+      <li>The route is fixed: fifteen stages. The model never picks what comes next.</li>
+      <li>Each stage runs as an isolated agent and reports back in five lines.</li>
+      <li>Scripts decide what happens next; a model only does the work inside a stage. Three gates check the work, and a decision goes to a person.</li>
+      <li>The core knows roles, not products. Jira, GitHub, Figma or EDS live in swappable packs.</li>
+      </ol>
     </div>
   </section>
 
-  <section class="section" id="layers">
+  <section class="section alt" id="layers">
     <div class="section-head">
       <p class="eyebrow">Three layers</p>
       <h2>Where determinism <em>stops</em></h2>
-      <p>The core is not one program. It is three layers with a sharp division of work, and the useful thing to know is exactly where a model is needed.</p>
+      <p>The core is not one program. It is three layers, and the useful thing to know is exactly where a model is needed.</p>
     </div>
     <div class="layers">
       <div class="layer det">
         <span class="n">Layer 1 · Scripts</span>
-        <p>No model, no tokens. Input is a file, output is one line and an exit code. Each script has a <code>.test.sh</code> beside it, so CI can prove this layer.</p>
-        <p>101 scripts in <code>agentic-core/shared/lib/</code>. The driver names 35 of them, two of which run as its own hooks; the stages call the rest.</p>
-        <p class="items">instructions-stamp · check-preflight · check-credentials · check-run-state · evaluate-stage-conditions · reset-envelope · capture-envelope · run-stage · validate-result-envelope · write-run-state · check-tree-unchanged · derive-branch-name · handle-question · resolve-terminal-state …</p>
+        <p>No model, no tokens. A file goes in, one line and an exit code come out. Each script has its own test, so CI can prove this layer.</p>
       </div>
       <div class="layer det">
         <span class="n">Layer 2 · Contracts</span>
-        <p>Markdown files that define a shape once. Everything else points at them with one line instead of restating them, because a restated rule quietly starts to disagree with itself.</p>
-        <p>33 contracts in <code>agentic-core/shared/</code>.</p>
-        <p class="items">result-envelope · stage-runner · terminal-states · question-protocol · error-handling · fix-loop · gate-contract · pre-flight · pack-manifest · role-operations · fact-record · run-state · external-content-safety · route-policy …</p>
+        <p>Markdown files that define each shape once: the result, the stages, the endings. Everything else points at them instead of restating them.</p>
       </div>
       <div class="layer mod">
         <span class="n">Layer 3 · The route driver</span>
-        <p>One skill, <code>agentic-core:run-route</code>. It owns control flow and nothing else, and it is the only component allowed to spawn a stage.</p>
-        <p>It never opens a source file or a path a stage wrote. A <code>PreToolUse</code> hook on <code>Read</code> enforces that while a run is live. Before anything else it proves its own instructions are the copy on disk, so a stale copy cannot run a route with a step missing.</p>
-        <p class="items">skills/run-route/SKILL.md · scripts/check-driver-read.sh</p>
+        <p>One skill, <code>agentic-core:run-route</code>. It owns control flow and nothing else. It is the only part that starts a stage, and it never reads what a stage wrote.</p>
       </div>
-    </div>
-    <div class="boundary">
-      <p><strong>The one step that needs a model.</strong> Resolving a stage, validating its envelope and choosing the next move are scripts. Spawning the stage as an isolated subagent is not, so the script stops right there and says so about itself:</p>
-      <blockquote>It does not spawn the adapter itself — that is the one step above this script that genuinely needs a model, left to whichever skill drives a full route.<br><span style="color:var(--dim)">— shared/lib/run-stage.sh</span></blockquote>
-    </div>
-    <div class="prose sub">
-      <h3>Two hosts, one driver</h3>
-      <p><strong>Interactive:</strong> a person types <code>/agentic-core:run-route &lt;item&gt; [autonomous]</code>. The skill sets <code>disable-model-invocation: true</code>, so a model never starts a run on its own.</p>
-      <p><strong>Headless:</strong> a CI workflow in the consuming project runs <code>shared/runner/route-agent.mjs</code>. It adds guardrails, not orchestration: <code>dontAsk</code> permissions, a tool allowlist, forbidden-tool rules enforced twice, a write-protected plugin directory, a locked network allowlist, and caps on turns, time and budget. Both hosts run the same driver, the same stages and the same run files.</p>
     </div>
   </section>
 
-  <section class="section alt" id="run">
+  <section class="section" id="run">
     <div class="section-head">
       <p class="eyebrow">One run, step by step</p>
       <h2>What happens between <em>command</em> and pull request</h2>
-      <p>Read top to bottom. Each row is one step, placed in the column of the layer that does the work.</p>
+      <p>Read top to bottom. Each row is one step, placed in the column that does the work.</p>
     </div>
     <figure class="shot run">
       <div class="shot-label"><span>One run of the route driver</span><span>Setup · loop · end</span></div>
       <div class="shot-frame">
-<svg viewBox="0 0 1200 1140" role="img" aria-labelledby="run-t run-d" style="font-family:Manrope, Arial, sans-serif">
+<svg viewBox="0 0 1090 774" role="img" aria-labelledby="run-t run-d" style="font-family:Manrope, Arial, sans-serif">
 <title id="run-t">One run of the route driver</title>
-<desc id="run-d">Sixteen numbered steps in three bands. Setup, once: the driver checks its own instructions, runs pre-flight, credential checks and the run-state check as scripts, spawns intake in the platform pack, filters the stage list once and checks session tools. Per stage, in a loop: reset the envelope, spawn the stage adapter as a forked subagent, the adapter works and emits its envelope, scripts capture and judge it, write run state and progress, after readiness only the driver creates the working branch through the scm role, and a question is handled by a script. End, once: scripts resolve exactly one terminal state, delivered, blocked or failed, and render analytics. Steps where a model decides are violet; deterministic steps are cyan.</desc>
+<desc id="run-d">Nine numbered steps in three bands. Setup, once: scripts run the pre-flight checks, the driver spawns intake in a pack to read the ticket, and a script filters the fifteen stages to this run's list. Per stage, in a loop: the driver spawns the stage as an isolated subagent, which does the work and returns a five-line result; scripts read the verdict and save run state; right after readiness the driver creates the working branch; a question is handled by a script. End, once: a script resolves exactly one ending, delivered, blocked or failed. Violet steps are where a model works; cyan steps are deterministic code.</desc>
 <defs><marker id="ra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b98cff"/></marker><marker id="rl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8391a8"/></marker></defs>
-<text x="120" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#55e8ff" text-anchor="start" letter-spacing="1.6">LAYER 1 · SCRIPTS</text>
-<rect x="120" y="54" width="320" height="2" fill="#55e8ff" opacity=".55"/>
-<text x="460" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#8391a8" text-anchor="start" letter-spacing="1.6">LAYER 2 · CONTRACTS</text>
-<rect x="460" y="54" width="190" height="2" fill="#8391a8" opacity=".55"/>
-<text x="670" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#b98cff" text-anchor="start" letter-spacing="1.6">LAYER 3 · DRIVER</text>
-<rect x="670" y="54" width="210" height="2" fill="#b98cff" opacity=".55"/>
-<text x="900" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#9ba7bd" text-anchor="start" letter-spacing="1.6">PACKS</text>
-<rect x="900" y="54" width="280" height="2" fill="#9ba7bd" opacity=".55"/>
 <text x="28" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#8391a8" text-anchor="start" letter-spacing="1.6">STEP</text>
-<rect x="14" y="96" width="1172" height="388" fill="rgba(156,182,226,.035)" stroke="rgba(156,182,226,.18)"/>
-<text x="28" y="118" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#9ba7bd" text-anchor="start" font-weight="500" letter-spacing="1.8">ONCE · SETUP</text>
-<rect x="14" y="502" width="1172" height="388" fill="rgba(185,140,255,.05)" stroke="rgba(185,140,255,.35)"/>
-<text x="28" y="524" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#b98cff" text-anchor="start" font-weight="500" letter-spacing="1.8">PER STAGE · LOOP</text>
-<rect x="14" y="908" width="1172" height="138" fill="rgba(156,182,226,.035)" stroke="rgba(156,182,226,.18)"/>
-<text x="28" y="930" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#9ba7bd" text-anchor="start" font-weight="500" letter-spacing="1.8">ONCE · END</text>
-<line x1="704" y1="124" x2="704" y2="1070" stroke="#b98cff" stroke-width="1.2" opacity=".45"/>
-<path d="M84 854.0 H96 V554.0 H108" fill="none" stroke="#b98cff" stroke-width="1.3" marker-end="url(#ra)"/>
-<text x="76" y="704.0" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#b98cff" text-anchor="middle" transform="rotate(-90 76 704.0)" letter-spacing="1">next stage</text>
-<line x1="120" y1="173" x2="1180" y2="173" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="153.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">01</text>
-<rect x="120" y="130" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="145" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">instructions-stamp.sh</text>
-<text x="130" y="159" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">own instructions current? stale copy stops</text>
-<circle cx="704" cy="148.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="152.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">checks itself</text>
-<line x1="120" y1="223" x2="1180" y2="223" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="203.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">02</text>
-<rect x="120" y="180" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="195" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">check-preflight.sh</text>
-<text x="130" y="209" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">config, packs, manifests  → blocked</text>
-<rect x="460" y="187" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="202" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">pre-flight.md</text>
-<circle cx="704" cy="198.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="202.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="273" x2="1180" y2="273" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="253.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">03</text>
-<rect x="120" y="230" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="245" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">check-credentials.sh</text>
-<text x="130" y="259" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">probes each pack declares  → blocked</text>
-<circle cx="704" cy="248.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="252.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="323" x2="1180" y2="323" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="303.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">04</text>
-<rect x="120" y="280" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="295" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">check-run-state.sh</text>
-<text x="130" y="309" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">under two hours: resume, else start fresh</text>
-<rect x="460" y="287" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="302" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">run-state.md</text>
-<circle cx="704" cy="298.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="302.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="373" x2="1180" y2="373" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="353.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#b98cff" text-anchor="start">05</text>
-<rect x="900" y="330" width="280" height="36" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.3"/>
-<text x="910" y="345" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">intake · tracker.fetch_item</text>
-<text x="910" y="359" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">sanitize the item, write the fact record</text>
-<rect x="460" y="337" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="352" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">external-content-safety.md</text>
-<circle cx="704" cy="348.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="352.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#b98cff" text-anchor="start" font-style="italic">spawns</text>
-<line x1="120" y1="423" x2="1180" y2="423" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="403.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">06</text>
-<rect x="120" y="380" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="395" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">evaluate-stage-conditions.sh</text>
-<text x="130" y="409" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">15 stage ids  → this run&#x27;s stage list</text>
-<rect x="460" y="387" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="402" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">pack-manifest.md</text>
-<circle cx="704" cy="398.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="402.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls once</text>
-<line x1="120" y1="473" x2="1180" y2="473" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="453.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">07</text>
-<rect x="120" y="430" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="445" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">check-session-tools.sh</text>
-<text x="130" y="459" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">tools a pack needs present?  → blocked</text>
-<circle cx="704" cy="448.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="452.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="579" x2="1180" y2="579" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="559.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">08</text>
-<rect x="120" y="536" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="551" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">reset-envelope.sh</text>
-<text x="130" y="565" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">gates also: check-tree-unchanged.sh snapshot</text>
-<circle cx="704" cy="554.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="558.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="629" x2="1180" y2="629" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="609.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#b98cff" text-anchor="start">09</text>
-<rect x="670" y="586" width="210" height="36" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.3"/>
-<text x="680" y="601" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">Skill(pack:stage)</text>
-<text x="680" y="615" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">spawn the adapter, context: fork</text>
-<line x1="120" y1="679" x2="1180" y2="679" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="659.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#b98cff" text-anchor="start">10</text>
-<rect x="900" y="636" width="280" height="36" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.3"/>
-<text x="910" y="651" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">stage adapter</text>
-<text x="910" y="665" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">does the work, calls roles, emit-envelope.sh</text>
-<rect x="460" y="643" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="658" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">result-envelope.md</text>
-<circle cx="704" cy="654.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="658.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">waits</text>
-<line x1="120" y1="729" x2="1180" y2="729" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="709.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">11</text>
-<rect x="120" y="686" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="701" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">capture-envelope · run-stage.sh</text>
-<text x="130" y="715" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">continue | question | terminate</text>
-<rect x="460" y="693" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="708" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">stage-runner.md</text>
-<circle cx="704" cy="704.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="708.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">reads 5 lines</text>
-<line x1="120" y1="779" x2="1180" y2="779" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="759.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">12</text>
-<rect x="120" y="736" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="751" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">write-run-state · write-progress-row</text>
-<text x="130" y="765" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">state, progress and flag refreshed</text>
-<rect x="460" y="743" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="758" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">progress-output.md</text>
-<circle cx="704" cy="754.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="758.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="829" x2="1180" y2="829" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="809.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#ffcf6e" text-anchor="start">13</text>
-<rect x="900" y="786" width="280" height="36" fill="rgba(255,207,110,.07)" stroke="#ffcf6e" stroke-width="1.3" stroke-dasharray="5 3"/>
-<text x="910" y="801" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#ffcf6e" text-anchor="start" font-weight="500">scm.create_branch</text>
-<text x="910" y="815" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">name from derive-branch-name.sh</text>
-<circle cx="704" cy="804.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="808.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls directly</text>
-<text x="122" y="808.0" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#ffcf6e" text-anchor="start" font-style="italic">only after readiness · check-item-satisfied.sh first</text>
-<line x1="120" y1="879" x2="1180" y2="879" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="859.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">14</text>
-<rect x="120" y="836" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="851" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">handle-question.sh</text>
-<text x="130" y="865" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">ask a person, or post the blocker</text>
-<rect x="460" y="843" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="858" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">question-protocol.md</text>
-<circle cx="704" cy="854.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="858.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">on question</text>
-<text x="902" y="858.0" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start" font-style="italic">autonomous: tracker.post_note  → blocked</text>
-<line x1="120" y1="985" x2="1180" y2="985" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="965.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">15</text>
-<rect x="120" y="942" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="957" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">resolve-terminal-state.sh</text>
-<text x="130" y="971" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">then finalize-run-state.sh: one end</text>
-<rect x="460" y="949" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="964" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">terminal-states.md</text>
-<circle cx="704" cy="960.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="964.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<line x1="120" y1="1035" x2="1180" y2="1035" stroke="rgba(156,182,226,.08)"/>
-<text x="28" y="1015.0" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">16</text>
-<rect x="120" y="992" width="320" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
-<text x="130" y="1007" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">render-run-analytics.sh</text>
-<text x="130" y="1021" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">analytics.md: peak context, billed input</text>
-<rect x="460" y="999" width="190" height="22" fill="none" stroke="#8391a8" stroke-dasharray="3 3"/>
-<text x="555.0" y="1014" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#cdd6e4" text-anchor="middle">analytics.md</text>
-<circle cx="704" cy="1010.0" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
-<text x="716" y="1014.0" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
-<path d="M880 604.0 H890 V654.0 H898" fill="none" stroke="#b98cff" stroke-width="1.4" marker-end="url(#ra)"/>
-<path d="M930 672 V680 H444" fill="none" stroke="#8391a8" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#rl)"/>
-<text x="938" y="694" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#8391a8" text-anchor="start">## Result, 5 lines</text>
-<text x="120" y="1096" font-family="Manrope, Arial, sans-serif" font-size="12" fill="#9ba7bd" text-anchor="start">the run ends in exactly one of</text>
-<rect x="480" y="1078" width="87.8" height="28" rx="14" fill="none" stroke="#55e8ff" stroke-width="1.5"/>
-<text x="523.9" y="1097" font-family="DM Mono, ui-monospace, monospace" font-size="12.5" fill="#55e8ff" text-anchor="middle" font-weight="500">delivered</text>
-<rect x="585.8" y="1078" width="71.39999999999999" height="28" rx="14" fill="none" stroke="#ffcf6e" stroke-width="1.5"/>
-<text x="621.5" y="1097" font-family="DM Mono, ui-monospace, monospace" font-size="12.5" fill="#ffcf6e" text-anchor="middle" font-weight="500">blocked</text>
-<rect x="675.1999999999999" y="1078" width="63.199999999999996" height="28" rx="14" fill="none" stroke="#ff9a8f" stroke-width="1.5"/>
-<text x="706.8" y="1097" font-family="DM Mono, ui-monospace, monospace" font-size="12.5" fill="#ff9a8f" text-anchor="middle" font-weight="500">failed</text>
+<text x="110" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#55e8ff" text-anchor="start" letter-spacing="1.6">SCRIPTS · CODE DECIDES</text>
+<rect x="110" y="54" width="340" height="2" fill="#55e8ff" opacity=".55"/>
+<text x="506" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#b98cff" text-anchor="start" letter-spacing="1.6">DRIVER</text>
+<rect x="506" y="54" width="150" height="2" fill="#b98cff" opacity=".55"/>
+<text x="690" y="42" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#9ba7bd" text-anchor="start" letter-spacing="1.6">PACKS · A MODEL WORKS</text>
+<rect x="690" y="54" width="370" height="2" fill="#9ba7bd" opacity=".55"/>
+<line x1="520" y1="112" x2="520" y2="684" stroke="#b98cff" stroke-width="1.2" opacity=".45"/>
+<path d="M84 544 H96 V344 H106" fill="none" stroke="#b98cff" stroke-width="1.3" marker-end="url(#ra)"/>
+<text x="76" y="444.0" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#b98cff" text-anchor="middle" transform="rotate(-90 76 444.0)" letter-spacing="1">next stage</text>
+<rect x="14" y="84" width="1062" height="190" fill="rgba(156,182,226,.035)" stroke="rgba(156,182,226,.18)"/>
+<text x="28" y="106" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#9ba7bd" text-anchor="start" font-weight="500" letter-spacing="1.8">ONCE · SETUP</text>
+<line x1="110" y1="161" x2="1080" y2="161" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="141" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">01</text>
+<rect x="110" y="118" width="340" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
+<text x="120" y="133" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">pre-flight checks</text>
+<text x="120" y="147" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">config, packs, credentials, resume?  → blocked</text>
+<circle cx="520" cy="136" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="140" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
+<line x1="110" y1="211" x2="1080" y2="211" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="191" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#b98cff" text-anchor="start">02</text>
+<rect x="690" y="168" width="370" height="36" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.3"/>
+<text x="700" y="183" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">intake · tracker.fetch_item</text>
+<text x="700" y="197" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">read the ticket as data, write the facts</text>
+<circle cx="520" cy="186" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="190" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#b98cff" text-anchor="start" font-style="italic">spawns</text>
+<line x1="110" y1="261" x2="1080" y2="261" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="241" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">03</text>
+<rect x="110" y="218" width="340" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
+<text x="120" y="233" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">evaluate-stage-conditions.sh</text>
+<text x="120" y="247" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">15 stages  → this run's list, once</text>
+<circle cx="520" cy="236" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="240" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls once</text>
+<rect x="14" y="292" width="1062" height="290" fill="rgba(185,140,255,.05)" stroke="rgba(185,140,255,.35)"/>
+<text x="28" y="314" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#b98cff" text-anchor="start" font-weight="500" letter-spacing="1.8">PER STAGE · LOOP</text>
+<line x1="110" y1="369" x2="1080" y2="369" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="349" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#b98cff" text-anchor="start">04</text>
+<rect x="690" y="326" width="370" height="36" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.3"/>
+<text x="700" y="341" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">stage · Skill(pack:stage)</text>
+<text x="700" y="355" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">does the work in its own context</text>
+<circle cx="520" cy="344" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="348" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#b98cff" text-anchor="start" font-style="italic">spawns</text>
+<line x1="110" y1="419" x2="1080" y2="419" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="399" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">05</text>
+<rect x="110" y="376" width="340" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
+<text x="120" y="391" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">run-stage.sh</text>
+<text x="120" y="405" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">reads 5 lines: continue, question or end</text>
+<circle cx="520" cy="394" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="398" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">reads the verdict</text>
+<line x1="110" y1="469" x2="1080" y2="469" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="449" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">06</text>
+<rect x="110" y="426" width="340" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
+<text x="120" y="441" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">write-run-state.sh</text>
+<text x="120" y="455" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">state and progress saved, a run can resume</text>
+<circle cx="520" cy="444" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="448" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
+<line x1="110" y1="519" x2="1080" y2="519" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="499" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#ffcf6e" text-anchor="start">07</text>
+<rect x="690" y="476" width="370" height="36" fill="rgba(255,207,110,.07)" stroke="#ffcf6e" stroke-width="1.3" stroke-dasharray="5 3"/>
+<text x="700" y="491" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#ffcf6e" text-anchor="start" font-weight="500">scm.create_branch</text>
+<text x="700" y="505" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">once, right after readiness</text>
+<circle cx="520" cy="494" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="498" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls directly</text>
+<line x1="110" y1="569" x2="1080" y2="569" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="549" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">08</text>
+<rect x="110" y="526" width="340" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
+<text x="120" y="541" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">handle-question.sh</text>
+<text x="120" y="555" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">ask a person, then run the stage once more</text>
+<circle cx="520" cy="544" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="548" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">on question</text>
+<rect x="14" y="600" width="1062" height="90" fill="rgba(156,182,226,.035)" stroke="rgba(156,182,226,.18)"/>
+<text x="28" y="622" font-family="DM Mono, ui-monospace, monospace" font-size="11.5" fill="#9ba7bd" text-anchor="start" font-weight="500" letter-spacing="1.8">ONCE · END</text>
+<line x1="110" y1="677" x2="1080" y2="677" stroke="rgba(156,182,226,.08)"/>
+<text x="28" y="657" font-family="DM Mono, ui-monospace, monospace" font-size="13" fill="#55e8ff" text-anchor="start">09</text>
+<rect x="110" y="634" width="340" height="36" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.3"/>
+<text x="120" y="649" font-family="DM Mono, ui-monospace, monospace" font-size="12" fill="#f7f8fb" text-anchor="start" font-weight="500">resolve-terminal-state.sh</text>
+<text x="120" y="663" font-family="Manrope, Arial, sans-serif" font-size="10.5" fill="#9ba7bd" text-anchor="start">exactly one ending</text>
+<circle cx="520" cy="652" r="3.5" fill="#071020" stroke="#b98cff" stroke-width="1.3"/>
+<text x="532" y="656" font-family="Manrope, Arial, sans-serif" font-size="11" fill="#9ba7bd" text-anchor="start" font-style="italic">calls</text>
+<path d="M720 362 V370 H454" fill="none" stroke="#8391a8" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#rl)"/>
+<text x="728" y="382" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#8391a8" text-anchor="start">## Result, 5 lines</text>
+<text x="110" y="742" font-family="Manrope, Arial, sans-serif" font-size="12" fill="#9ba7bd" text-anchor="start">the run ends in exactly one of</text>
+<rect x="300" y="724" width="88" height="28" rx="14" fill="none" stroke="#55e8ff" stroke-width="1.5"/>
+<text x="344.0" y="743" font-family="DM Mono, ui-monospace, monospace" font-size="12.5" fill="#55e8ff" text-anchor="middle" font-weight="500">delivered</text>
+<rect x="406" y="724" width="72" height="28" rx="14" fill="none" stroke="#ffcf6e" stroke-width="1.5"/>
+<text x="442.0" y="743" font-family="DM Mono, ui-monospace, monospace" font-size="12.5" fill="#ffcf6e" text-anchor="middle" font-weight="500">blocked</text>
+<rect x="496" y="724" width="64" height="28" rx="14" fill="none" stroke="#ff9a8f" stroke-width="1.5"/>
+<text x="528.0" y="743" font-family="DM Mono, ui-monospace, monospace" font-size="12.5" fill="#ff9a8f" text-anchor="middle" font-weight="500">failed</text>
 </svg>
       </div>
       <p class="scroll-hint">Scroll the figure sideways to see every column.</p>
       <div class="key">
         <span><i class="sw det"></i>Deterministic code decides</span>
-        <span><i class="sw mod"></i>A model decides</span>
-        <span><i class="sw ref"></i>Contract the step follows</span>
+        <span><i class="sw mod"></i>A model works</span>
         <span><i class="sw br"></i>Only after <code>readiness</code></span>
       </div>
-      <figcaption>Setup runs once, the loop runs once per stage on the filtered list, the end runs once. Inside the loop a model does exactly two things: the driver spawns the stage, and the stage does its work. Every decision about what happens next is a script reading the five-line envelope.</figcaption>
+      <figcaption>Inside the loop a model does exactly two things: the driver starts the stage, and the stage does its work. Every decision about what happens next is a script reading the five-line result.</figcaption>
     </figure>
   </section>
 
-  <section class="section" id="vocabulary">
+  <section class="section alt" id="vocabulary">
     <div class="section-head">
       <p class="eyebrow">The core's vocabulary</p>
       <h2>Everything the core <em>knows</em></h2>
@@ -530,8 +412,8 @@ pre.envelope .c { color: var(--dim); }
     </div>
 
     <div class="sub" style="margin-top:0">
-      <h3>Fifteen stage ids</h3>
-      <p class="prose" style="color:var(--muted)">Fixed and platform-neutral, in the order a full route runs them. A pack implements an id or declines it; no pack may add one. Gates are outlined.</p>
+      <h3>Fifteen stages</h3>
+      <p class="prose" style="color:var(--muted)">Fixed, in the order a full route runs them. A pack implements a stage or declines it; no pack may add one. The three gates are outlined.</p>
       <ol class="chips">
         <li>intake</li><li class="gate">readiness</li><li>extract</li><li>conventions</li><li>serve</li>
         <li>baseline</li><li>prototype</li><li>verify-design</li><li>plan</li><li class="gate">plan-gate</li>
@@ -540,78 +422,64 @@ pre.envelope .c { color: var(--dim); }
     </div>
 
     <div class="sub">
-      <h3>Four roles and their operations</h3>
+      <h3>Four roles</h3>
       <dl class="defs">
-        <div><dt>tracker</dt><dd>Where the work item lives.<span class="ops">fetch_item · post_note · attach_file · list_types · create_item · update_item</span></dd></div>
-        <div><dt>scm</dt><dd>Where the change is published.<span class="ops">create_branch · publish_change · check_status</span></dd></div>
-        <div><dt>design</dt><dd>Where the design reference comes from.<span class="ops">fetch_reference</span></dd></div>
-        <div><dt>browser</dt><dd>What renders and measures the page.<span class="ops">render · capture · measure · interact</span></dd></div>
+        <div><dt>tracker</dt><dd>Where the work item lives.</dd></div>
+        <div><dt>scm</dt><dd>Where the change is published.</dd></div>
+        <div><dt>design</dt><dd>Where the design reference comes from.</dd></div>
+        <div><dt>browser</dt><dd>What renders and measures the page.</dd></div>
       </dl>
-      <p class="prose" style="color:var(--muted);margin-top:1rem">A stage calls an operation by role, never by pack name. Project config binds each role to one provider pack, and the pack is found by its plugin name through a registry each plugin writes at session start, never by a relative folder path.</p>
+      <p class="prose" style="color:var(--muted);margin-top:1rem">A stage calls a role, never a product. Project config binds each role to one provider pack.</p>
     </div>
 
     <div class="sub two">
       <div>
-        <h3>The result envelope</h3>
+        <h3>The five-line result</h3>
 <pre class="envelope"><span class="k">## Result</span>
 <span class="k">verdict:</span> pass | warn | fail | question
 <span class="k">summary:</span> &lt;one sentence&gt;
 <span class="k">artifacts:</span>
   - &lt;path written or updated&gt;
-<span class="k">next_action:</span> &lt;short phrase, or "none"&gt;
-<span class="c"># on fail or question:</span>
-<span class="k">error_class:</span> TRANSIENT | VALIDATION | PERMANENT
-<span class="c"># on question:</span>
-<span class="k">question:</span> …   <span class="k">blocker:</span> …   <span class="k">options:</span> …</pre>
-        <p style="color:var(--muted);margin-top:1rem;font-size:.95rem">Every stage and every role operation ends with this block. It must be the last thing emitted; the driver reads nothing else.</p>
+<span class="k">next_action:</span> &lt;short phrase, or "none"&gt;</pre>
+        <p style="color:var(--muted);margin-top:1rem;font-size:.95rem">Every stage ends with this block. The driver reads nothing else.</p>
       </div>
       <div>
         <h3>Verdicts</h3>
         <dl class="defs verdicts">
           <div><dt>pass</dt><dd>Go to the next stage.</dd></div>
-          <div><dt class="warn">warn</dt><dd>Go on; the warning is recorded. Never terminal.</dd></div>
+          <div><dt class="warn">warn</dt><dd>Go on; the warning is recorded.</dd></div>
           <div><dt class="fail">fail</dt><dd>The run ends. The driver never retries.</dd></div>
-          <div><dt class="q">question</dt><dd>Asked at the stage boundary only. Interactive: a person answers and the stage runs once more. Autonomous: the blocker is posted to the item and the run ends <code>blocked</code>.</dd></div>
-        </dl>
-        <h3 style="margin-top:1.6rem">error_class</h3>
-        <dl class="defs">
-          <div><dt>TRANSIENT</dt><dd>The environment is busy: a timeout, a quota. Ends <code>blocked</code> with the remedy.</dd></div>
-          <div><dt>PERMANENT</dt><dd>The environment is missing something: a tool, a login. Ends <code>blocked</code> with the remedy.</dd></div>
-          <div><dt>VALIDATION</dt><dd>The input itself was wrong. The verdict decides: <code>fail</code> ends <code>failed</code>.</dd></div>
+          <div><dt class="q">question</dt><dd>A person answers and the stage runs once more. With nobody to ask, the run ends <code>blocked</code>.</dd></div>
         </dl>
       </div>
     </div>
-    <p class="prose" style="color:var(--muted);margin-top:2rem">A stage that fans out to subagents of its own uses a second block, <code>## Outcome</code> with <code>status: success | warning | failure</code>. It shares no word with the envelope, so a block from the wrong tier fails validation instead of silently matching a branch.</p>
+
+    <div class="sub">
+      <h3>Three gates, three endings</h3>
+      <p class="prose" style="color:var(--muted)"><code>readiness</code>, <code>plan-gate</code> and <code>publish-gate</code> check with scripts first, then a reviewing model looks only at what survives. A gate may not change the project; the driver checks that before and after.</p>
+      <div class="ends">
+        <div class="ok"><span class="tag">delivered</span><p>The last stage passed. The pull request exists.</p></div>
+        <div class="bl"><span class="tag">blocked</span><p>Something is missing: an answer, a login, a tool. The run says what and where.</p></div>
+        <div class="fa"><span class="tag">failed</span><p>A stage failed or broke a contract. The run names the stage.</p></div>
+      </div>
+      <p class="claim">Exactly one of the three ends every run.</p>
+    </div>
   </section>
 
-  <section class="section alt" id="ends">
+  <section class="section" id="guidance">
     <div class="section-head">
-      <p class="eyebrow">Gates and terminal states</p>
-      <h2>Three gates, three <em>endings</em></h2>
-      <p>Gates are ordinary stages to the driver. What makes them gates is what runs inside and what they may write.</p>
+      <p class="eyebrow">Design against published guidance</p>
+      <h2>How it lines up with <em>Anthropic's</em> advice</h2>
+      <p>Each row pairs a design decision with the published guidance it matches.</p>
     </div>
-    <div class="prose">
-      <p><code>readiness</code>, <code>plan-gate</code> and <code>publish-gate</code> are the three gates. Inside each, the order is fixed: deterministic criteria scripts first, then a reviewing model only on what survives, on a stronger model tier. <code>readiness</code> writes nothing. The two reviewing gates write exactly two files, their findings report and their envelope. The driver snapshots the project tree before a gate and compares after; any other change ends the stage <code>failed</code>, whatever the envelope says.</p>
+    <div class="pairs">
+      <div class="pairs-head"><span>What the core does</span><span>What the guidance says</span></div>
+      <div class="pair"><div><strong>A fixed route of fifteen stages.</strong> The model never decides which stage comes next.</div><div>Use a workflow, a predefined code path, when the task is predictable. Add autonomy only where it pays for itself.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a></span></div></div>
+      <div class="pair"><div><strong>Scripts before any model.</strong> Deterministic checks run first and cost nothing; a reviewing model sees only what survives.</div><div>Grade with code first and with a model only where code cannot decide.<span class="src"><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals</a></span></div></div>
+      <div class="pair"><div><strong>One isolated agent per stage.</strong> The driver's context grows by five lines per stage, never by what a stage read.</div><div>A subagent works in its own context window and hands back a condensed result.<span class="src"><a href="https://www.anthropic.com/engineering/multi-agent-research-system">Multi-agent research system</a></span></div></div>
+      <div class="pair"><div><strong>The human decides.</strong> Three gates, and a question asked only between stages.</div><div>Keep a person in the loop for decisions that are costly to get wrong.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a></span></div></div>
+      <div class="pair"><div><strong>Tickets are untrusted input.</strong> <code>intake</code> cleans the item before anything acts on it.</div><div>Treat content the agent reads, such as tickets and documents, as data, never as instructions.<span class="src"><a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks">Mitigate jailbreaks and prompt injections</a></span></div></div>
     </div>
-    <div class="ends">
-      <div class="ok"><span class="tag">delivered</span><p><code>deliver</code> returned <code>pass</code>.</p><p>Prints the status table and the published location.</p></div>
-      <div class="bl"><span class="tag">blocked</span><p>A question unanswered or posted back, a pre-flight or credential failure, a dirty tree at a fresh start, work already on the base branch, or an environment fault.</p><p>Prints what is missing and where it was recorded.</p></div>
-      <div class="fa"><span class="tag">failed</span><p>A stage returned <code>fail</code>, or a contract violation: an envelope that does not validate, a stage that cannot be resolved, a gate that changed the tree.</p><p>Prints the failing stage and its summary.</p></div>
-    </div>
-    <p class="claim">Exactly one of the three ends every run. <code>warn</code> is never one of them.</p>
-  </section>
-
-  <section class="section" id="rejected">
-    <div class="section-head">
-      <p class="eyebrow">Rejected alternatives</p>
-      <h2>Shapes it was measured <em>against</em></h2>
-      <p>Kept because the reasoning behind a rejection is what nobody reconstructs later.</p>
-    </div>
-    <ul class="chapters">
-      <li class="chapter"><p class="chapter-marker">Wrong layer</p><div><h3>A shell loop as the orchestrator</h3><p>A script calling <code>run-stage.sh</code> in a loop. But <code>run-stage.sh</code> does not spawn the stage, on purpose. The loop would validate envelope files nobody had written and would "pass" having done nothing. The driver has to spawn a subagent, and only a skill can.</p></div></li>
-      <li class="chapter"><p class="chapter-marker">Conflicts with pre-flight</p><div><h3>A liveness probe instead of a declaration</h3><p>Pre-flight would prove a capability by calling it: start the tool, see whether something answers. A false negative there aborts a run before a branch exists, on sandbox or network conditions the pack author does not control, and a tool that answered once has not shown it is configured.</p><p>So pre-flight reads what each pack declares. A provider pack lists its local preconditions with a probe and a remedy, the read-only <code>health</code> skill runs those probes on demand, and the operation itself refuses to run without its tool.</p></div></li>
-      <li class="chapter"><p class="chapter-marker">Duplicate state</p><div><h3>A second state file and a second progress file</h3><p>Both already exist: <code>run-state.json</code> and <code>progress.md</code>, with the two-hour resume window and a refresh after every stage. Two files for one state is a source of divergence, not redundancy.</p></div></li>
-    </ul>
   </section>
 
   <div class="part-band" id="eds">
@@ -622,12 +490,12 @@ pre.envelope .c { color: var(--dim); }
 
   <section class="section">
     <div class="note">
-      <p><strong>EDS is one swappable platform pack.</strong> The core has a closed list of fifteen stages; a pack implements or declines each one and never adds a new one (D42). A React or Next.js pack could bind the same stages its own way tomorrow, with no change to the core. Behaviour no stage id covers goes inside a stage the pack already owns.</p>
+      <p><strong>EDS is one swappable platform pack.</strong> A pack implements or declines each of the fifteen stages and never adds a new one. A React or Next.js pack could bind the same stages its own way, with no change to the core.</p>
     </div>
     <div class="section-head" style="margin-top:clamp(2.5rem,5vw,4rem)">
       <p class="eyebrow">The default route</p>
       <h2>Fifteen stages, four of them <em>conditional</em></h2>
-      <p>From <code>agentic-eds/pack.yaml</code>. A filtered list, not a branching graph: conditions are checked once, after <code>intake</code>, and a skipped stage passes control to the next in list order.</p>
+      <p>From <code>agentic-eds/pack.yaml</code>. Conditions are checked once, after <code>intake</code>; a skipped stage passes control to the next one in the list.</p>
     </div>
     <figure class="shot route">
       <div class="shot-label"><span>agentic-eds · route.dot</span><span>Conditions from the fact record</span></div>
@@ -731,35 +599,12 @@ pre.envelope .c { color: var(--dim); }
 </svg>
       </div>
       <p class="scroll-hint">Scroll the figure sideways to see the whole route.</p>
-      <figcaption>A dashed stage runs only when its <code>when:</code> matches the fact record <code>intake</code> wrote. The driver creates the working branch itself, right after <code>readiness</code> and before the first stage that may write.</figcaption>
+      <figcaption>A dashed stage runs only when its condition matches what <code>intake</code> learned about the ticket.</figcaption>
     </figure>
-
-    <div class="cards sub">
-      <div>
-        <span class="tag">Gate reviewer agent</span>
-        <p>Both reviewing gates, <code>eds-plan-gate</code> and <code>eds-publish-gate</code>, run as <code>agentic-eds:eds-gate-reviewer</code>: <code>model: opus</code>, <code>effort: high</code>, <code>isolation: worktree</code>, tools <code>Read, Glob, Grep, Bash, Write</code>.</p>
-        <p>It reviews, it never fixes, and it writes exactly two files. Because the harness may run it without the worktree, the gate checks its own isolation (<code>check-gate-isolation.sh</code>) and records <code>present</code> or <code>absent</code> in its report. It never changes the verdict; the driver's tree snapshot is what holds the two-file rule either way.</p>
-      </div>
-      <div>
-        <span class="tag">Conventions subagents</span>
-        <p><code>eds-conventions</code> learns the project before anything is written. It dispatches three subagents of its own, <code>styles</code>, <code>markup</code> and <code>component reuse</code>, and synthesizes one conventions artifact.</p>
-        <p>The subagents answer with the inner <code>## Outcome</code> block; the stage reports its own envelope and never passes a subagent's outcome through unchanged.</p>
-      </div>
-      <div>
-        <span class="tag">Edit budgets</span>
-        <p>A <code>fix_attempts</code> value is a budget of edits, declared only on a stage that asks <code>check-fix-budget.sh</code> before each edit.</p>
-        <ul class="budgets">
-          <li><b>verify-design</b> · 2 edits</li>
-          <li><b>plan</b> · 1 edit</li>
-          <li><b>lint</b> · 3 edits</li>
-        </ul>
-        <p>Any other stage uses <code>limits.fix_attempts_default</code> from project config.</p>
-      </div>
-    </div>
   </section>
 </main>
 
-<div class="page-note"><p>Read from <code>agentic-core</code> 0.2.18 and <code>agentic-eds</code> 0.2.14 on <code>main</code>: the driver skill, <code>shared/</code>, <code>pack.yaml</code> and <code>route.dot</code>. Counts are file counts in those folders.</p>
+<div class="page-note"><p>Read from <code>agentic-core</code> 0.2.18 and <code>agentic-eds</code> 0.2.14 on <code>main</code>.</p>
   <p><a class="pl" href="../">All parts</a> · <a class="pl" href="https://github.com/agenticDraft/plugins">Repo</a></p></div>
 <footer class="site-footer">
   <a class="footer-brand" href="https://www.agenticdraft.dev/"><img src="../assets/agenticdraft-mark.png" alt="" width="36" height="36"><span>AgenticDraft</span></a>

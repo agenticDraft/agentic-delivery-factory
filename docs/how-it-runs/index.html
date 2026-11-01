@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delivery Core Developer Guide</title>
+<meta name="description" content="How the agentic delivery core runs, for a developer about to change agentic-core, write a pack, or debug a run: what runs, in what order, which file does each step, and where a change belongs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Delivery Factory developer guide, the concept page's dark world: navy ground, spectrum accents,
+   square edges. Wide figures and tables scroll inside their own frame; the page itself never scrolls sideways. */
+:root {
+  color-scheme: dark;
+  --ink: #f7f8fb;
+  --muted: #9ba7bd;
+  --dim: #8391a8;
+  --navy: #071020;
+  --navy-2: #0a1427;
+  --navy-3: #081225;
+  --footer: #050c18;
+  --line: rgba(156, 182, 226, .16);
+  --line-strong: rgba(156, 182, 226, .26);
+  --cyan: #55e8ff;
+  --violet: #b98cff;
+  --amber: #ffcf6e;
+  --red: #ff9a8f;
+  --spectrum: linear-gradient(110deg, var(--cyan), #75a0ff 58%, #c588ff);
+  --sans: "Manrope", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --space-page: clamp(1rem, 5vw, 4.5rem);
+  --space-section: clamp(3.5rem, 7vw, 6rem);
+  --measure: 66ch;
+  --code-fg: #cdd6e4;
+  --code-bg: rgba(156, 182, 226, .1);
+  --code-line: rgba(156, 182, 226, .18);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { box-sizing: border-box; max-width: 1280px; margin: 0 auto; background: var(--navy); color: var(--ink); font: 400 17px/1.65 var(--sans); overflow-x: hidden; }
+main, section, div, nav, ul, ol, li, p, h1, h2, h3, figure, table { min-width: 0; }
+p, h1, h2, h3, a, span, li, td { overflow-wrap: break-word; }
+a { color: inherit; }
+a.pl { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+::selection { background: var(--cyan); color: var(--navy); }
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
+h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { text-wrap: balance; }
+section[id] { scroll-margin-top: 90px; }
+code { font: .86em/1.4 var(--mono); color: var(--code-fg); background: var(--code-bg);
+  border: 1px solid var(--code-line); padding: .05em .35em; overflow-wrap: anywhere; }
+strong { font-weight: 700; color: var(--ink); }
+
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; padding: 1.1rem var(--space-page);
+  background: rgba(7, 16, 32, .9); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: .7rem; font-weight: 700; font-size: 1.15rem;
+  letter-spacing: -.035em; text-decoration: none; }
+.brand-mark { width: 14px; height: 14px; background: var(--spectrum); transform: rotate(45deg); }
+.site-nav { display: flex; gap: 1.6rem; font-size: .98rem; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+.site-nav a { color: var(--muted); text-decoration: none; white-space: nowrap; transition: color .2s; }
+.site-nav a:hover { color: var(--ink); }
+
+.hero { position: relative; padding: clamp(3.5rem, 8vw, 6.5rem) var(--space-page) 0; isolation: isolate;
+  border-bottom: 1px solid rgba(156, 182, 226, .28); overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -2;
+  background: linear-gradient(180deg, rgba(85, 140, 255, .045), transparent 42%); }
+.hero-glow { position: absolute; z-index: -1; width: 50vw; max-width: 100%; aspect-ratio: 1; left: -20vw; top: 2rem;
+  border-radius: 50%; background: radial-gradient(circle, rgba(55, 135, 255, .16), transparent 65%); filter: blur(16px); }
+.eyebrow { display: flex; align-items: center; gap: .8rem; margin: 0 0 1.2rem; font: 500 .8rem/1.45 var(--mono);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.eyebrow::before { content: ""; flex: none; width: 36px; height: 2px; background: var(--spectrum); }
+h1 { margin-bottom: 1.4rem; font-size: clamp(2.4rem, 6.5vw, 5rem); line-height: 1.02; letter-spacing: -.045em; font-weight: 600; }
+h1 em, h2 em { font-style: normal; color: var(--cyan); }
+.lede { max-width: var(--measure); color: var(--muted); font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.6;
+  letter-spacing: -.012em; margin-bottom: clamp(1.4rem, 3vw, 2rem); }
+.proof { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: .6rem 2rem; align-items: baseline;
+  margin-inline: calc(var(--space-page) * -1); margin-top: clamp(2rem, 4vw, 3rem); padding: 1.35rem var(--space-page);
+  border-top: 1px solid rgba(156, 182, 226, .25); background: var(--navy-2); }
+.proof-label { margin: 0; color: var(--muted); font: .78rem/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.proof p:last-child { margin: 0; max-width: 80ch; color: var(--muted); font-size: .98rem; line-height: 1.6; }
+
+.section { padding: var(--space-section) var(--space-page); border-top: 1px solid var(--line); }
+.section.alt { background: var(--navy-3); }
+.section-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); column-gap: clamp(2rem, 6vw, 6rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem); }
+.section-head .eyebrow { grid-column: 1 / -1; }
+h2 { margin-bottom: 0; font-size: clamp(1.9rem, 4vw, 3.2rem); line-height: 1.05; letter-spacing: -.04em; font-weight: 600; }
+h3 { margin: 0 0 .35rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
+.section-head > p:last-child { align-self: end; max-width: 46ch; margin: 0; color: var(--muted); font-size: 1.08rem; line-height: 1.65; }
+.prose { max-width: var(--measure); }
+.prose p, .prose li { color: var(--muted); }
+.prose ol, .prose ul { padding-left: 1.2rem; }
+.prose li { margin: .35rem 0; }
+.sub { margin-top: clamp(2.2rem, 4vw, 3rem); }
+.sub > h3 { font-size: 1.3rem; margin-bottom: .8rem; }
+.note { margin: 1.6rem 0 0; padding: 1rem 1.2rem; border: 1px solid rgba(255, 207, 110, .35); background: rgba(255, 207, 110, .05);
+  max-width: 72ch; color: var(--muted); }
+.note strong { color: var(--amber); }
+.note p:last-child { margin-bottom: 0; }
+
+/* figures */
+.shot { margin: 0; }
+.shot-label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem 2rem; margin-bottom: .8rem;
+  color: var(--dim); font: .74rem/1.5 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+.shot-frame { overflow-x: auto; border: 1px solid rgba(156, 182, 226, .22); background: var(--navy); padding: 12px; }
+.shot svg { display: block; width: 100%; height: auto; }
+.shot.parts svg { min-width: 900px; }
+.shot pre.mermaid { margin: 0; color: var(--code-fg); font: .82rem/1.55 var(--mono); white-space: pre; }
+.shot.seq .shot-frame > * { min-width: 680px; }
+.shot.flow .shot-frame > * { min-width: 640px; }
+.mermaid-diagram svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.shot figcaption { margin-top: .9rem; max-width: 76ch; color: var(--muted); font-size: .95rem; }
+.scroll-hint { display: none; color: var(--dim); font: .74rem/1.5 var(--mono); margin: .5rem 0 0; }
+@media (max-width: 900px) { .scroll-hint { display: block; } }
+.key { display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; margin-top: 1rem; color: var(--muted); font-size: .92rem; }
+.key span { display: inline-flex; align-items: center; gap: .5rem; }
+.sw { width: 22px; height: 12px; border: 1.5px solid; flex: none; }
+.sw.det { border-color: var(--cyan); background: rgba(85, 232, 255, .1); }
+.sw.mod { border-color: var(--violet); background: rgba(185, 140, 255, .12); }
+.sw.br { border-color: var(--amber); border-style: dashed; background: rgba(255, 207, 110, .08); }
+ol.edges { margin: 1.4rem 0 0; padding-left: 1.4rem; max-width: 80ch; }
+ol.edges li { margin: .45rem 0; color: var(--muted); }
+ol.edges strong { color: var(--ink); }
+
+/* tables */
+.table-wrap { overflow-x: auto; max-width: 100%; border: 1px solid var(--line-strong); background: var(--navy); }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: .9rem; line-height: 1.5; }
+th { text-align: left; font: 500 .7rem/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+  padding: .75rem .9rem; border-bottom: 1px solid var(--line-strong); background: var(--navy-2); }
+td { vertical-align: top; padding: .7rem .9rem; border-bottom: 1px solid var(--line); color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+tr.band td { font: 500 .7rem/1.5 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--violet); background: rgba(185, 140, 255, .07); }
+td.stop { color: var(--red); }
+.table-wrap.narrow table { min-width: 440px; }
+
+/* three layers */
+.layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.layer { background: var(--navy); padding: 1.4rem 1.3rem; }
+.layer .n { display: block; margin-bottom: .5rem; font: .74rem/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.layer.det .n { color: var(--cyan); }
+.layer.mod .n { color: var(--violet); }
+.layer p { color: var(--muted); font-size: .97rem; margin-bottom: 0; }
+blockquote { max-width: 72ch; margin: 1.4rem 0; padding: .8rem 0 .8rem 1.2rem; border-left: 3px solid var(--violet);
+  font: .9rem/1.65 var(--mono); color: var(--code-fg); }
+blockquote cite { display: block; margin-top: .4rem; color: var(--dim); font-style: normal; }
+
+/* rejected alternatives */
+.rejected { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.rejected > div { background: var(--navy); padding: 1.3rem 1.3rem; }
+.rejected .tag { display: inline-block; margin-bottom: .6rem; padding: .2rem .5rem; font: 500 .7rem/1.4 var(--mono);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border: 1px solid rgba(255, 207, 110, .4); }
+.rejected p { margin: 0; color: var(--muted); font-size: .97rem; }
+
+.site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
+  padding: 2.2rem var(--space-page, 0); color: var(--muted); background: var(--footer, transparent); border-top: 1px solid var(--line-strong, var(--line));
+  font-size: .95rem; }
+.site-footer p { margin: 0; }
+.site-footer a { color: inherit; text-decoration: none; }
+.site-footer a:hover { color: var(--ink); text-decoration: underline; }
+.footer-brand { display: inline-flex; align-items: center; gap: .7rem; color: var(--ink); font-weight: 700; letter-spacing: -.02em; }
+.footer-brand img { width: 36px; height: 36px; object-fit: contain; border-radius: 8px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+.page-note { margin: 0; padding: 1.5rem var(--space-page, 0) 0; color: var(--muted); font-size: .95rem; }
+.page-note p { margin: 0 0 .5rem; max-width: 80ch; }
+
+@media (max-width: 960px) {
+  .layers, .rejected { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 860px) {
+  .section-head { grid-template-columns: minmax(0, 1fr); }
+  .section-head > p:last-child { margin-top: 1.2rem; }
+  .proof { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .site-header { flex-direction: column; align-items: flex-start; gap: .7rem; }
+  .site-nav { width: 100%; gap: 1.2rem; font-size: .92rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .site-nav a { transition-duration: 0s; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Delivery Factory · Developer guide</a>
+  <nav class="site-nav" aria-label="Sections">
+    <a href="#parts">The parts</a>
+    <a href="#stage">One stage</a>
+    <a href="#flow">The whole run</a>
+    <a href="#steps">Steps</a>
+    <a href="#files">Files</a>
+    <a href="#change">Where to change</a>
+    <a href="#hosts">Hosts</a>
+    <a href="#boundary">Boundary</a>
+    <a href="#gates">Gates</a>
+    <a href="#rejected">Rejected</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <p class="eyebrow">Delivery Factory · Developer guide</p>
+    <h1>How the delivery core <em>runs</em>.</h1>
+    <p class="lede">For a developer about to change <code>agentic-core</code>, write a pack, or debug a run. It shows what runs, in what order, which file does each step, and where a change belongs.</p>
+    <div class="proof">
+      <p class="proof-label">Read first</p>
+      <p>The idea behind it, for an architect, is on the <a class="pl" href="../how-it-works/">Delivery core concept</a> page. This page assumes it: the fifteen stages, the four roles, the five-line result and the three endings are not explained again here.</p>
+    </div>
+  </section>
+
+  <section class="section" id="parts">
+    <div class="section-head">
+      <p class="eyebrow">Figure 1 · the parts</p>
+      <h2>Who talks to <em>whom</em></h2>
+      <p>The orchestrator is one skill, <code>agentic-core:run-route</code>, called the route driver below. It is the only part allowed to start a stage. Everything that decides is a script; a model is involved only where a skill runs.</p>
+    </div>
+    <figure class="shot parts">
+      <div class="shot-label"><span>The parts of the delivery core</span><span>Numbers match the list below</span></div>
+      <div class="shot-frame">
+<svg viewBox="0 0 1100 500" role="img" aria-labelledby="dp-t dp-d" style="font-family:Manrope, Arial, sans-serif">
+<title id="dp-t">The parts of the delivery core</title>
+<desc id="dp-d">A host starts the route driver skill. The driver calls core scripts, which answer with one line and an exit code. The driver spawns one platform pack stage adapter per stage; the adapter calls provider packs by role and writes its five-line envelope to disk. Scripts read and write run state on disk. Once, right after readiness, the driver calls the scm provider's create_branch itself. Contracts in shared/*.md define every shape and all parts follow them.</desc>
+<defs>
+  <marker id="dah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ba7bd"/></marker>
+  <marker id="dac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#55e8ff"/></marker>
+  <marker id="dam" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b98cff"/></marker>
+  <marker id="dab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ffcf6e"/></marker>
+</defs>
+<rect x="20" y="16" width="1060" height="40" fill="none" stroke="#8391a8" stroke-dasharray="4 3"/>
+<text x="36" y="41" font-family="DM Mono, ui-monospace, monospace" font-size="11" fill="#9ba7bd" letter-spacing="1.4">CONTRACTS</text>
+<text x="140" y="41" font-size="12.5" fill="#f7f8fb">shared/*.md · 33 files · every shape is defined once here, and every box below follows it</text>
+<path d="M470 110 V84 H965 V108" fill="none" stroke="#ffcf6e" stroke-width="1.4" stroke-dasharray="6 3" marker-end="url(#dab)"/>
+<circle cx="560" cy="84" r="9" fill="#071020" stroke="#ffcf6e"/><text x="560" y="88" font-size="11" fill="#ffcf6e" text-anchor="middle" font-weight="600">7</text>
+<text x="576" y="78" font-family="DM Mono, ui-monospace, monospace" font-size="11" fill="#ffcf6e">scm.create_branch, once, right after readiness</text>
+<rect x="20" y="110" width="200" height="80" fill="#0a1427" stroke="#9ba7bd" stroke-width="1.2"/>
+<text x="34" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#9ba7bd" letter-spacing="1.4">HOST</text>
+<text x="34" y="154" font-size="12" fill="#f7f8fb">interactive: you type</text>
+<text x="34" y="170" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#f7f8fb">/agentic-core:run-route</text>
+<text x="34" y="184" font-size="12" fill="#f7f8fb">headless: route-agent.mjs</text>
+<rect x="290" y="110" width="230" height="80" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.4"/>
+<text x="304" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#b98cff" letter-spacing="1.4">ROUTE DRIVER · SKILL</text>
+<text x="304" y="156" font-size="14" font-weight="600" fill="#f7f8fb">agentic-core:run-route</text>
+<text x="304" y="176" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#9ba7bd">skills/run-route/SKILL.md</text>
+<rect x="600" y="110" width="210" height="80" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.4"/>
+<text x="614" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#b98cff" letter-spacing="1.4">PLATFORM PACK · SKILL</text>
+<text x="614" y="156" font-size="14" font-weight="600" fill="#f7f8fb">stage adapter</text>
+<text x="614" y="176" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#9ba7bd">eds-&lt;stage&gt; · context: fork</text>
+<rect x="870" y="110" width="210" height="80" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.4"/>
+<text x="884" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#b98cff" letter-spacing="1.4">PROVIDER PACKS · SKILLS</text>
+<text x="884" y="156" font-size="14" font-weight="600" fill="#f7f8fb">one per role</text>
+<text x="884" y="176" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#9ba7bd">tracker scm design browser</text>
+<path d="M220 150 H286" fill="none" stroke="#9ba7bd" stroke-width="1.3" marker-end="url(#dah)"/>
+<circle cx="253" cy="150" r="9" fill="#071020" stroke="#9ba7bd"/><text x="253" y="154" font-size="11" fill="#9ba7bd" text-anchor="middle" font-weight="600">1</text>
+<path d="M520 150 H596" fill="none" stroke="#b98cff" stroke-width="1.5" marker-end="url(#dam)"/>
+<circle cx="558" cy="150" r="9" fill="#071020" stroke="#b98cff"/><text x="558" y="154" font-size="11" fill="#b98cff" text-anchor="middle" font-weight="600">3</text>
+<path d="M810 150 H866" fill="none" stroke="#b98cff" stroke-width="1.5" marker-end="url(#dam)"/>
+<circle cx="838" cy="150" r="9" fill="#071020" stroke="#b98cff"/><text x="838" y="154" font-size="11" fill="#b98cff" text-anchor="middle" font-weight="600">4</text>
+<rect x="290" y="260" width="230" height="80" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.4"/>
+<text x="304" y="282" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#55e8ff" letter-spacing="1.4">CORE SCRIPTS · NO MODEL</text>
+<text x="304" y="306" font-size="14" font-weight="600" fill="#f7f8fb">shared/lib/*.sh · 101</text>
+<text x="304" y="326" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#9ba7bd">file in, one line + exit code out</text>
+<path d="M405 190 V256" fill="none" stroke="#55e8ff" stroke-width="1.4" marker-end="url(#dac)"/>
+<circle cx="405" cy="223" r="9" fill="#071020" stroke="#55e8ff"/><text x="405" y="227" font-size="11" fill="#55e8ff" text-anchor="middle" font-weight="600">2</text>
+<text x="422" y="227" font-size="11.5" fill="#9ba7bd">calls, reads one line back</text>
+<rect x="20" y="400" width="1060" height="62" fill="rgba(156,182,226,.05)" stroke="#9ba7bd"/>
+<text x="36" y="422" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#9ba7bd" letter-spacing="1.4">ON DISK · .ai/ IN THE PROJECT</text>
+<text x="36" y="446" font-family="DM Mono, ui-monospace, monospace" font-size="11" fill="#f7f8fb">run-state.json · progress.md · run-context/ fact-record.yaml · envelope-&lt;stage&gt;.txt · question-answer.yaml · orchestrating.flag · branch.txt</text>
+<path d="M405 340 V396" fill="none" stroke="#55e8ff" stroke-width="1.4" marker-end="url(#dac)"/>
+<circle cx="405" cy="368" r="9" fill="#071020" stroke="#55e8ff"/><text x="405" y="372" font-size="11" fill="#55e8ff" text-anchor="middle" font-weight="600">6</text>
+<text x="422" y="372" font-size="11.5" fill="#9ba7bd">write run state, judge envelopes</text>
+<path d="M705 190 V396" fill="none" stroke="#b98cff" stroke-width="1.4" marker-end="url(#dam)"/>
+<circle cx="705" cy="290" r="9" fill="#071020" stroke="#b98cff"/><text x="705" y="294" font-size="11" fill="#b98cff" text-anchor="middle" font-weight="600">5</text>
+<text x="722" y="286" font-size="11.5" fill="#9ba7bd">reads the fact record,</text>
+<text x="722" y="301" font-size="11.5" fill="#9ba7bd">writes its own envelope</text>
+<text x="20" y="490" font-size="11.5" fill="#8391a8">The driver never reads what a stage wrote. It learns a stage's result only through scripts 2 and 6, from the envelope file.</text>
+</svg>
+      </div>
+      <p class="scroll-hint">Scroll the figure sideways to see every part.</p>
+      <div class="key">
+        <span><i class="sw det"></i>Code decides (no model, no tokens)</span>
+        <span><i class="sw mod"></i>A skill runs (a model works)</span>
+        <span><i class="sw br"></i>Only after <code>readiness</code></span>
+      </div>
+    </figure>
+    <ol class="edges">
+      <li><strong>Host → driver.</strong> A person types <code>/agentic-core:run-route &lt;item&gt; [autonomous]</code>, or CI runs <code>shared/runner/route-agent.mjs</code> with the same command. The skill sets <code>disable-model-invocation: true</code>, so a model never starts a run on its own.</li>
+      <li><strong>Driver → core scripts.</strong> Every check and every decision: pre-flight, run state, which stages run, is the envelope valid, what happens next. Each script prints one line and exits with a code the driver branches on.</li>
+      <li><strong>Driver → stage adapter.</strong> <code>Skill(&lt;pack&gt;:&lt;skill&gt;)</code>, one stage at a time. The adapter declares <code>context: fork</code>, so it runs as an isolated subagent and its context dies with it.</li>
+      <li><strong>Adapter → provider packs.</strong> By role, never by product: the adapter calls the role operation's skill (<code>shared/role-operations.md</code>). Project config binds each role to one pack.</li>
+      <li><strong>Adapter → disk.</strong> It reads <code>fact-record.yaml</code> and, when re-invoked, its own answer. It ends by writing its envelope with <code>emit-envelope.sh</code>. Its chat message is ignored.</li>
+      <li><strong>Scripts → disk.</strong> <code>capture-envelope.sh</code> and <code>run-stage.sh</code> judge the envelope file; <code>write-run-state.sh</code>, <code>write-progress-row.sh</code> and <code>write-orchestration-flag.sh</code> record the stage.</li>
+      <li><strong>Driver → scm provider, once.</strong> Right after <code>readiness</code>, the last stage that writes nothing, the driver puts the run on its own branch. It is the only provider call the driver makes itself, apart from <code>tracker.post_note</code> when an autonomous run ends <code>blocked</code>.</li>
+    </ol>
+  </section>
+
+  <section class="section alt" id="stage">
+    <div class="section-head">
+      <p class="eyebrow">Figure 2 · one stage</p>
+      <h2>One stage, step by <em>step</em></h2>
+      <p>The driver repeats this for every stage that is not skipped. It never runs two stages at once and never retries one. Most bugs live here.</p>
+    </div>
+    <figure class="shot seq">
+      <div class="shot-label"><span>The moves the driver makes per stage</span><span>Sequence</span></div>
+      <div class="shot-frame">
+<pre class="mermaid">
+sequenceDiagram
+  autonumber
+  participant D as Route driver
+  participant S as Core scripts
+  participant A as Stage adapter
+  participant F as Disk .ai/run-context
+  D->>S: reset-envelope.sh
+  S->>F: empty envelope-STAGE.txt
+  opt plan-gate or publish-gate
+    D->>S: check-tree-unchanged.sh snapshot
+  end
+  D->>A: Skill(pack:skill), isolated fork
+  A->>F: read fact-record.yaml
+  A->>F: emit-envelope.sh writes the 5 lines
+  A-->>D: returns, message is not read
+  D->>S: capture-envelope.sh
+  opt plan-gate or publish-gate
+    D->>S: check-tree-unchanged.sh compare
+    S-->>D: anything else changed ends the run failed
+  end
+  D->>S: run-stage.sh
+  S-->>D: continue, question or terminate
+  alt continue
+    D->>S: print-progress-line, write-run-state, write-progress-row, write-orchestration-flag
+    S->>F: run-state.json, progress.md, orchestrating.flag
+  else question
+    D->>S: handle-question.sh, then ask a person, re-invoke once
+  else terminate
+    D->>D: end blocked or failed
+  end
+</pre>
+      </div>
+      <p class="scroll-hint">Scroll the figure sideways to see every participant.</p>
+      <figcaption>The envelope file is emptied first, so a file left by an earlier run can never pass as this stage's result. An empty file after the stage returns is the stage's failure; the driver never writes into it. For a gate, the tree snapshot before and the comparison after are what enforce "a gate writes only its report and its envelope".</figcaption>
+    </figure>
+  </section>
+
+  <section class="section" id="flow">
+    <div class="section-head">
+      <p class="eyebrow">Figure 3 · the whole run</p>
+      <h2>Every way <em>out</em></h2>
+      <p>Simplified from the <code>## Flow</code> graph in <code>skills/run-route/SKILL.md</code>, which stays the source of truth. Every exit is shown.</p>
+    </div>
+    <figure class="shot flow">
+      <div class="shot-label"><span>Setup, the loop, the branch step</span><span>Flowchart</span></div>
+      <div class="shot-frame">
+<pre class="mermaid">
+flowchart TD
+  classDef bl fill:#2a2412,stroke:#ffcf6e,color:#ffcf6e
+  classDef fa fill:#2a1614,stroke:#ff9a8f,color:#ff9a8f
+  classDef ok fill:#0d2a30,stroke:#55e8ff,color:#55e8ff
+  A["instructions-stamp.sh"] -->|"stale copy"| X(["stop, restart session"]):::fa
+  A --> B["check-preflight.sh"]
+  B -->|invalid| BL1(["blocked"]):::bl
+  B --> C["check-requires.sh, check-credentials.sh"]
+  C -->|missing| BL2(["blocked"]):::bl
+  C --> D["check-run-state.sh"]
+  D -->|"resume, under 2 h"| R["re-evaluate stage conditions"]
+  R -->|"list differs"| FA1(["failed"]):::fa
+  R --> BR
+  D -->|"fresh start"| E["check-tree-clean.sh"]
+  E -->|"dirty tree"| BL3(["blocked"]):::bl
+  E --> F["archive-run-context.sh"]
+  F --> G["spawn intake"]
+  G -->|fail| FA2(["failed"]):::fa
+  G --> H["evaluate-stage-conditions.sh"]
+  H --> I["check-session-tools.sh"]
+  I -->|missing| BL4(["blocked"]):::bl
+  I --> J["record intake"]
+  J --> L["next stage in the list"]
+  L -->|"skipped"| L
+  L --> M["run one stage, Figure 2"]
+  M -->|question| Q["handle-question.sh, ask, re-invoke once"]
+  Q -->|"autonomous or cap"| BL5(["blocked"]):::bl
+  Q --> M
+  M -->|"fail or contract violation"| FA3(["failed"]):::fa
+  M -->|"environment fault"| BL6(["blocked"]):::bl
+  M -->|"deliver passed"| DE(["delivered"]):::ok
+  M -->|"readiness passed"| BR["ensure the branch, scm.create_branch"]
+  BR -->|"already merged"| BL7(["blocked"]):::bl
+  BR -->|fail| FA4(["failed"]):::fa
+  BR --> L
+  M -->|"other stage passed"| L
+</pre>
+      </div>
+      <p class="scroll-hint">Scroll the figure sideways to see every exit.</p>
+      <figcaption>Every ending runs <code>finalize-orchestration-flag.sh</code>, <code>render-run-analytics.sh</code> and <code>resolve-terminal-state.sh</code>. Only <code>delivered</code> deletes <code>run-state.json</code>; after <code>blocked</code> or <code>failed</code> it stays for a person to read.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section alt" id="steps">
+    <div class="section-head">
+      <p class="eyebrow">Steps reference</p>
+      <h2>One row per driver <em>step</em></h2>
+      <p>In run order. All scripts are under <code>plugins/agentic-core/shared/lib/</code>.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Step</th><th>Script or call</th><th>Reads</th><th>Writes</th><th>When it fails</th></tr></thead>
+      <tbody>
+        <tr class="band"><td colspan="5">Setup, once</td></tr>
+        <tr><td>Check own instructions</td><td><code>instructions-stamp.sh</code></td><td><code>SKILL.md</code> on disk</td><td>nothing</td><td class="stop">stop, restart the session</td></tr>
+        <tr><td>Resolve packs</td><td><code>resolve-plugin-root.sh &lt;pack&gt;</code></td><td><code>.ai/project-config.yaml</code>, the plugin root registry</td><td>nothing</td><td class="stop">failed</td></tr>
+        <tr><td>Pre-flight</td><td><code>check-preflight.sh</code></td><td>project config, every <code>pack.yaml</code></td><td>nothing</td><td class="stop">blocked</td></tr>
+        <tr><td>Tools and credentials</td><td><code>check-requires.sh</code>, <code>check-credentials.sh</code></td><td>each pack's declared probes</td><td>nothing</td><td class="stop">blocked, remedy quoted</td></tr>
+        <tr><td>Resume or fresh</td><td><code>check-run-state.sh</code></td><td><code>.ai/run-state.json</code></td><td>deletes it when 2 hours old</td><td>asks: resume or start fresh</td></tr>
+        <tr><td>Clean tree (fresh only)</td><td><code>write-working-paths.sh</code>, <code>check-tree-clean.sh</code></td><td>git status</td><td><code>working-paths.txt</code></td><td class="stop">blocked, paths named</td></tr>
+        <tr><td>Archive last run (fresh only)</td><td><code>archive-run-context.sh</code></td><td><code>.ai/run-context/</code></td><td><code>.ai/logs/run-context-&lt;date&gt;-&lt;time&gt;/</code></td><td>—</td></tr>
+        <tr><td>Intake</td><td><code>Skill(&lt;platform&gt;:&lt;intake skill&gt;)</code> with <code>item_id:</code></td><td>the tracker</td><td><code>fact-record.yaml</code>, its envelope</td><td class="stop">failed, or blocked on a tracker fault</td></tr>
+        <tr><td>Pick the stages</td><td><code>evaluate-stage-conditions.sh</code></td><td><code>pack.yaml</code> <code>when:</code>, fact record</td><td><code>stage-conditions.txt</code>, <code>route-progress.txt</code></td><td>—</td></tr>
+        <tr><td>Session tools</td><td><code>check-session-tools.sh</code></td><td>packs' <code>session_tools:</code></td><td>nothing</td><td class="stop">blocked</td></tr>
+        <tr><td>Record intake</td><td><code>write-run-state.sh</code>, <code>write-progress-row.sh</code>, <code>write-orchestration-flag.sh</code></td><td>—</td><td><code>run-state.json</code>, <code>progress.md</code>, <code>orchestrating.flag</code></td><td>—</td></tr>
+        <tr class="band"><td colspan="5">Per stage, in a loop (Figure 2)</td></tr>
+        <tr><td>Empty the envelope</td><td><code>reset-envelope.sh</code></td><td>—</td><td><code>envelope-&lt;stage&gt;.txt</code></td><td>—</td></tr>
+        <tr><td>Snapshot (gates only)</td><td><code>check-tree-unchanged.sh snapshot</code></td><td>the project tree</td><td><code>tree-before-&lt;gate&gt;.txt</code></td><td class="stop">failed</td></tr>
+        <tr><td>Run the stage</td><td><code>Skill(&lt;pack&gt;:&lt;skill&gt;)</code></td><td>(the stage reads its own inputs)</td><td>(the stage writes its artifacts and envelope)</td><td class="stop">failed if the skill is not loaded</td></tr>
+        <tr><td>Capture</td><td><code>capture-envelope.sh</code></td><td>the envelope file</td><td>normalizes it in place</td><td class="stop">failed: no <code>## Result</code></td></tr>
+        <tr><td>Compare (gates only)</td><td><code>check-tree-unchanged.sh compare</code></td><td>snapshot, tree</td><td>nothing</td><td class="stop">failed, paths named</td></tr>
+        <tr><td>Judge</td><td><code>run-stage.sh</code></td><td>envelope, <code>pack.yaml</code></td><td>nothing</td><td>continue · question · terminate</td></tr>
+        <tr><td>Record</td><td><code>print-progress-line.sh</code>, <code>write-run-state.sh</code>, <code>write-progress-row.sh</code>, <code>write-orchestration-flag.sh</code></td><td>—</td><td>run state, progress, flag</td><td>—</td></tr>
+        <tr><td>Branch (after readiness)</td><td><code>derive-branch-name.sh</code>, <code>check-branch-name.sh</code>, scm <code>check_status</code>, <code>check-item-satisfied.sh</code>, scm <code>create_branch</code></td><td>fact record <code>item_id</code></td><td><code>branch.txt</code></td><td class="stop">failed, or blocked when already merged</td></tr>
+        <tr><td>Question</td><td><code>handle-question.sh</code>, <code>write-question-answer.sh</code>, <code>check-tree-unchanged.sh</code></td><td>envelope</td><td><code>question-answer.yaml</code></td><td class="stop">blocked when autonomous or over the cap</td></tr>
+        <tr class="band"><td colspan="5">End, once</td></tr>
+        <tr><td>Finish</td><td><code>finalize-orchestration-flag.sh</code>, <code>render-run-analytics.sh</code>, <code>resolve-terminal-state.sh</code>; <code>finalize-run-state.sh</code> on delivered only</td><td>run context, transcript</td><td><code>analytics.md</code></td><td>analytics never decide the ending</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section" id="files">
+    <div class="section-head">
+      <p class="eyebrow">Files on disk</p>
+      <h2>Who writes, who <em>reads</em></h2>
+      <p>Root <code>.ai/</code> is the driver's own bookkeeping; no stage reads it. <code>.ai/run-context/</code> crosses the boundary: stages read it as their input.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Path</th><th>Written by</th><th>Read by</th></tr></thead>
+      <tbody>
+        <tr><td><code>.ai/project-config.yaml</code></td><td>the <code>setup</code> skill, once</td><td>the driver, every pack</td></tr>
+        <tr><td><code>.ai/run-state.json</code></td><td><code>write-run-state.sh</code> after every stage</td><td><code>check-run-state.sh</code> at the next start (resume within 2 hours)</td></tr>
+        <tr><td><code>.ai/progress.md</code>, <code>.ai/route-progress.txt</code></td><td><code>write-progress-row.sh</code>, <code>evaluate-stage-conditions.sh</code></td><td>the driver, <code>print-progress-line.sh</code></td></tr>
+        <tr><td><code>run-context/fact-record.yaml</code></td><td><code>intake</code>, once, never rewritten</td><td>every stage, <code>evaluate-stage-conditions.sh</code></td></tr>
+        <tr><td><code>run-context/envelope-&lt;stage&gt;.txt</code></td><td>the stage, through <code>emit-envelope.sh</code></td><td><code>capture-envelope.sh</code>, <code>run-stage.sh</code></td></tr>
+        <tr><td><code>run-context/question-answer.yaml</code></td><td><code>write-question-answer.sh</code></td><td>the stage that asked, on its re-invocation</td></tr>
+        <tr><td><code>run-context/stage-conditions.txt</code></td><td><code>evaluate-stage-conditions.sh</code></td><td><code>write-run-state.sh</code></td></tr>
+        <tr><td><code>run-context/orchestrating.flag</code></td><td><code>write-orchestration-flag.sh</code>, refreshed per stage</td><td>the read hook, <code>check-orchestration-flag.sh</code></td></tr>
+        <tr><td><code>run-context/branch.txt</code></td><td>the driver, after <code>create_branch</code> passes</td><td><code>deliver</code>, a resumed run</td></tr>
+        <tr><td><code>run-context/tree-before-&lt;gate&gt;.txt</code></td><td><code>check-tree-unchanged.sh snapshot</code></td><td>the same script's <code>compare</code></td></tr>
+        <tr><td><code>run-context/analytics.md</code></td><td><code>render-run-analytics.sh</code> at every ending</td><td>a person</td></tr>
+        <tr><td><code>.ai/logs/run-route-reads.log</code></td><td>the driver's read hook, one line per <code>Read</code></td><td>a person debugging a run</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section alt" id="change">
+    <div class="section-head">
+      <p class="eyebrow">Where to change what</p>
+      <h2>A change has one <em>home</em></h2>
+      <p>Run the tests with <code>bash scripts/run-tests.sh plugins/agentic-core</code> (once: <code>npm ci</code> in <code>shared/runner</code>).</p>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>You want to</th><th>Change this</th><th>Then</th></tr></thead>
+      <tbody>
+        <tr><td>Add or change a check the driver runs</td><td><code>agentic-core/shared/lib/&lt;name&gt;.sh</code> and its <code>&lt;name&gt;.test.sh</code> beside it; call it from the right node in <code>skills/run-route/SKILL.md</code></td><td>Regenerate the stamp: <code>instructions-stamp.sh --write</code>. A driver with a stale stamp refuses to run.</td></tr>
+        <tr><td>Change a shape (envelope, run state, fact record)</td><td>The contract in <code>agentic-core/shared/*.md</code>, then the validator script that enforces it</td><td>Never restate the shape anywhere else; point at the contract.</td></tr>
+        <tr><td>Change what one stage does for EDS</td><td><code>agentic-eds/skills/eds-&lt;stage&gt;/SKILL.md</code></td><td>Keep <code>context: fork</code> in its frontmatter; <code>validate-pack-manifest.sh</code> checks it.</td></tr>
+        <tr><td>Skip a stage under a condition</td><td><code>when:</code> on that stage in the platform pack's <code>pack.yaml</code></td><td>Conditions read fact-record fields only and are checked once, after <code>intake</code>.</td></tr>
+        <tr><td>Support another tracker, SCM, design tool or browser</td><td>A new provider pack implementing the role's operations (<code>shared/role-operations.md</code>)</td><td>Bind it in <code>.ai/project-config.yaml</code> under <code>packs:</code>. No core change.</td></tr>
+        <tr><td>Support another platform</td><td>A new platform pack whose <code>pack.yaml</code> lists the fifteen stage ids</td><td>Implement or decline each one; a pack never adds a stage id.</td></tr>
+        <tr><td>Ship any of it</td><td><code>version</code> in the plugin's <code>plugin.json</code> and its entry in <code>marketplace.json</code></td><td>A change under <code>agentic-core/shared</code> bumps the core and every pack, because each pack's <code>core</code> links there. CI checks it.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section" id="hosts">
+    <div class="section-head">
+      <p class="eyebrow">Two hosts, one driver</p>
+      <h2>Interactive or <em>headless</em></h2>
+      <p>An interactive run proves the orchestration; only a headless run proves the guardrails.</p>
+    </div>
+    <div class="prose">
+      <p><strong>Interactive.</strong> A person types the command in Claude Code. A <code>question</code> is asked with <code>AskUserQuestion</code>.</p>
+      <p><strong>Headless.</strong> The consuming project's CI workflow checks out the plugins at the pinned tag and runs <code>node shared/runner/route-agent.mjs "/agentic-core:run-route &lt;item&gt;"</code>. The runner adds guardrails, not orchestration:</p>
+      <ol>
+        <li>It refuses to start without <code>ROUTE_PLUGIN_DIR</code>, with a policy that <code>check-route-policy.sh</code> rejects, or when the network allowlist cannot be locked.</li>
+        <li>It write-protects the plugin directory, the committed settings and the policy file.</li>
+        <li>It runs one Agent SDK session with <code>permissionMode: "dontAsk"</code>: a call <code>ROUTE_ALLOWED_TOOLS</code> does not cover is denied.</li>
+        <li>It enforces the policy's forbidden rules as <code>disallowedTools</code> and again in a <code>PreToolUse</code> hook that covers subagents. A <code>Stop</code> hook keeps the session alive until the driver records an ending.</li>
+        <li>It caps turns, wall-clock time and budget from the policy; environment variables can only lower the caps.</li>
+      </ol>
+    </div>
+    <div class="sub">
+      <h3>Exit codes</h3>
+      <div class="table-wrap narrow"><table>
+        <thead><tr><th>Exit</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>0</code></td><td>the session ended with success</td></tr>
+          <tr><td><code>1</code></td><td>any other result, no result, or an error</td></tr>
+          <tr><td><code>2</code> · <code>4</code> · <code>5</code></td><td>wall-clock cap · turn cap · budget cap reached</td></tr>
+          <tr><td><code>3</code> · <code>6</code> · <code>7</code></td><td>policy invalid · network allowlist refused · <code>ROUTE_PLUGIN_DIR</code> unset; nothing started</td></tr>
+          <tr><td><code>64</code></td><td>no prompt given</td></tr>
+        </tbody>
+      </table></div>
+      <p class="prose" style="color:var(--muted);margin-top:1rem">It writes <code>runner-result.txt</code> and <code>terminal-state.txt</code> under <code>.ai/run-context/</code>.</p>
+    </div>
+  </section>
+
+  <section class="section alt" id="boundary">
+    <div class="section-head">
+      <p class="eyebrow">The determinism boundary</p>
+      <h2>Three layers, in <em>numbers</em></h2>
+      <p>The concept page names the layers. Here is what each one holds, and the two mistakes no run output would show.</p>
+    </div>
+    <div class="layers">
+      <div class="layer det"><span class="n">Layer 1 · scripts</span><p>101 scripts in <code>shared/lib/</code>; 99 have a <code>.test.sh</code> beside them. No model, no tokens: CI can prove this layer.</p></div>
+      <div class="layer det"><span class="n">Layer 2 · contracts</span><p>33 Markdown files in <code>shared/</code>. Each shape is defined once; everything else points at it with one line, because a restated rule drifts.</p></div>
+      <div class="layer mod"><span class="n">Layer 3 · the driver</span><p>One skill. It owns control flow and nothing else. A <code>PreToolUse</code> hook on <code>Read</code> (<code>skills/run-route/scripts/check-driver-read.sh</code>) denies it any file a stage wrote while a run is live.</p></div>
+    </div>
+    <div class="prose" style="margin-top:1.6rem">
+      <p>The stage runner stops short of running the stage on purpose, and says so about itself:</p>
+    </div>
+    <blockquote>It does not spawn the adapter itself — that is the one step above this script that genuinely needs a model, left to whichever skill drives a full route.<cite>— shared/lib/run-stage.sh</cite></blockquote>
+    <div class="sub">
+      <h3>Isolation belongs to the adapter</h3>
+      <p class="prose" style="color:var(--muted)">An adapter that forgets <code>context: fork</code> still runs and still returns a valid envelope. Nothing visible fails; its context just piles up in the driver instead of dying with the stage. That is why <code>validate-pack-manifest.sh</code> checks the field: no run output would ever show the mistake.</p>
+    </div>
+    <div class="sub">
+      <h3>Two result blocks</h3>
+      <p class="prose" style="color:var(--muted)">A stage ends with <code>## Result</code> (<code>verdict: pass | warn | fail | question</code>, plus <code>error_class</code> on fail or question). A stage that fans out to subagents of its own gets <code>## Outcome</code> (<code>status: success | warning | failure</code>) back from them. The two share no word, so a block from the wrong level fails validation instead of matching a branch by accident.</p>
+    </div>
+  </section>
+
+  <section class="section" id="gates">
+    <div class="section-head">
+      <p class="eyebrow">Gates</p>
+      <h2>Ordinary stages with a fixed <em>order</em></h2>
+      <p><code>readiness</code>, <code>plan-gate</code> and <code>publish-gate</code> are ordinary stages to the driver.</p>
+    </div>
+    <div class="prose">
+      <p>What makes them gates is the order inside, fixed by <code>shared/gate-contract.md</code>: deterministic criteria scripts first, then a reviewing model on what survives, on a stronger model tier.</p>
+      <p>In <code>agentic-eds</code> both reviewing gates run as the agent <code>agentic-eds:eds-gate-reviewer</code> (<code>model: opus</code>, <code>effort: high</code>, <code>isolation: worktree</code>, tools <code>Read, Glob, Grep, Bash, Write</code>). It reviews and never fixes, and writes exactly two files: <code>&lt;gate&gt;-report.md</code> and its envelope.</p>
+      <p>The worktree holds tracked files only, so the gate cannot find <code>.ai/run-context/</code> by itself. The driver passes its own directory as the gate's one argument, <code>project_root:</code>. The harness may also run the gate without a worktree and say nothing; the gate checks that with <code>agentic-eds/shared/scripts/check-gate-isolation.sh</code> and writes <code>isolation: present</code> or <code>absent</code> in its report. Being unisolated never changes the verdict. The driver's snapshot and comparison are what hold the two-file rule either way.</p>
+    </div>
+  </section>
+
+  <section class="section alt" id="rejected">
+    <div class="section-head">
+      <p class="eyebrow">Rejected alternatives</p>
+      <h2>Proposals that do not come <em>back</em></h2>
+      <p>Kept so the same proposal does not return under a new name.</p>
+    </div>
+    <div class="rejected">
+      <div><span class="tag">Wrong layer</span><h3>A shell loop as the orchestrator</h3><p>A script calling <code>run-stage.sh</code> in a loop. But <code>run-stage.sh</code> does not start the stage, on purpose. The loop would judge envelope files nobody wrote and pass having done nothing. Starting a subagent needs a skill.</p></div>
+      <div><span class="tag">Conflicts with pre-flight</span><h3>A liveness probe instead of a declaration</h3><p>Proving a capability by calling it gives false negatives on sandbox or network conditions the pack author does not control, and aborts a run before a branch exists. Pre-flight reads what each pack declares instead; a provider lists its preconditions with a probe and a remedy, and the read-only <code>health</code> skill runs them on demand.</p></div>
+      <div><span class="tag">Duplicate state</span><h3>A second state file and a second progress file</h3><p><code>run-state.json</code> and <code>progress.md</code> already exist, with the two-hour resume window. Two files for one state diverge.</p></div>
+      <div><span class="tag">Category error</span><h3>Priority, estimates and dependencies per stage</h3><p>Order is already the stage list. That advice is for an agent tracking work across many sessions; a pipeline whose list is resolved up front does not have that problem.</p></div>
+    </div>
+  </section>
+</main>
+
+<div class="page-note"><p>Read from <code>agentic-core</code> 0.2.19 (<code>skills/run-route/SKILL.md</code>, <code>shared/</code>, <code>shared/runner/route-agent.mjs</code>) and <code>agentic-eds</code> 0.2.14 (<code>pack.yaml</code>, <code>agents/eds-gate-reviewer.md</code>) on <code>main</code>. Counts are file counts on that commit, test files excluded.</p>
+  <p><a class="pl" href="../how-it-works/">Delivery core concept</a> · <a class="pl" href="../">All parts</a> · <a class="pl" href="https://github.com/agenticDraft/plugins">Repo</a></p></div>
+<footer class="site-footer">
+  <a class="footer-brand" href="https://www.agenticdraft.dev/"><img src="../assets/agenticdraft-mark.png" alt="" width="36" height="36"><span>AgenticDraft</span></a>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="https://www.agenticdraft.dev/">agenticdraft.dev</a>
+    <a href="https://www.linkedin.com/in/zoranzokimarkovic/">LinkedIn · Zoran Markovic</a>
+    <a href="https://github.com/agenticDraft/plugins">Repo</a>
+  </nav>
+  <p>&copy; 2026 AgenticDraft · <a href="https://github.com/agenticDraft/agentic-delivery-factory/blob/main/LICENSE">MIT License</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+<script>
+(function () {
+  if (typeof mermaid === 'undefined') return; /* the diagram source stays readable as text */
+  mermaid.initialize({
+    startOnLoad: false, securityLevel: 'strict', theme: 'base',
+    flowchart: { useMaxWidth: false }, sequence: { useMaxWidth: false },
+    themeVariables: {
+      darkMode: true, background: '#071020', fontFamily: 'Manrope, Arial, sans-serif', fontSize: '15px',
+      primaryColor: '#0a1427', mainBkg: '#0a1427', primaryTextColor: '#f7f8fb', textColor: '#f7f8fb',
+      primaryBorderColor: '#9ba7bd', nodeBorder: '#9ba7bd', lineColor: '#8391a8', edgeLabelBackground: '#071020',
+      actorBkg: 'rgba(185,140,255,.12)', actorBorder: '#b98cff', actorTextColor: '#f7f8fb', actorLineColor: '#5d6a82',
+      signalColor: '#9ba7bd', signalTextColor: '#f7f8fb', labelBoxBkgColor: '#0a1427', labelBoxBorderColor: '#8391a8',
+      labelTextColor: '#f7f8fb', loopTextColor: '#9ba7bd', sequenceNumberColor: '#071020',
+      noteBkgColor: '#0a1427', noteTextColor: '#f7f8fb', noteBorderColor: '#8391a8'
+    }
+  });
+  document.querySelectorAll('pre.mermaid').forEach(function (pre, i) {
+    mermaid.render('mmd-' + i, pre.textContent).then(function (r) {
+      var mount = document.createElement('div');
+      mount.className = 'mermaid-diagram';
+      mount.innerHTML = r.svg;
+      pre.replaceWith(mount);
+    }, function () { /* keep the source text on a parse error */ });
+  });
+})();
+</script>
+</body>
+</html>

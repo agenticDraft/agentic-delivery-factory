@@ -215,14 +215,17 @@ blockquote cite { display: block; margin-top: .4rem; color: var(--dim); font-sty
   <section class="section" id="parts">
     <div class="section-head">
       <p class="eyebrow">Figure 1 · the parts</p>
-      <h2>Who talks to <em>whom</em></h2>
+      <h2>The parts, mapped to <em>files</em></h2>
+      <p>The same picture as <a class="pl" href="../how-it-works/#parts">The parts</a> on the concept page, same boxes, same numbered connections. There each box says what it is responsible for; here it says which skill, path or script carries it.</p>
+    </div>
+    <div class="prose" style="margin-bottom:clamp(1.6rem,3vw,2.2rem)">
       <p>The orchestrator is one skill, <code>agentic-core:run-route</code>, called the route driver below. It is the only part allowed to start a stage. Everything that decides is a script; a model is involved only where a skill runs.</p>
     </div>
     <figure class="shot parts">
-      <div class="shot-label"><span>The parts of the delivery core</span><span>Numbers match the list below</span></div>
+      <div class="shot-label"><span>The parts, mapped to files</span><span>Numbers match the list below</span></div>
       <div class="shot-frame">
 <svg viewBox="0 0 1100 500" role="img" aria-labelledby="dp-t dp-d" style="font-family:Manrope, Arial, sans-serif">
-<title id="dp-t">The parts of the delivery core</title>
+<title id="dp-t">The parts of the delivery core, mapped to files</title>
 <desc id="dp-d">A host starts the route driver skill. The driver calls core scripts, which answer with one line and an exit code. The driver spawns one platform pack stage adapter per stage; the adapter calls provider packs by role and writes its five-line envelope to disk. Scripts read and write run state on disk. Once, right after readiness, the driver calls the scm provider's create_branch itself. Contracts in shared/*.md define every shape and all parts follow them.</desc>
 <defs>
   <marker id="dah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ba7bd"/></marker>
@@ -566,15 +569,15 @@ flowchart TD
 </main>
 
 <div class="page-note"><p>Read from <code>agentic-core</code> 0.2.19 (<code>skills/run-route/SKILL.md</code>, <code>shared/</code>, <code>shared/runner/route-agent.mjs</code>) and <code>agentic-eds</code> 0.2.14 (<code>pack.yaml</code>, <code>agents/eds-gate-reviewer.md</code>) on <code>main</code>. Counts are file counts on that commit, test files excluded.</p>
-  <p><a class="pl" href="../how-it-works/">Delivery core concept</a> · <a class="pl" href="../">All parts</a> · <a class="pl" href="https://github.com/agenticDraft/plugins">Repo</a></p></div>
+  <p><a class="pl" href="../how-it-works/">Delivery core concept</a> · <a class="pl" href="../">All parts</a> · <a class="pl" href="https://github.com/agenticDraft/plugins" target="_blank" rel="noopener noreferrer">Repo</a></p></div>
 <footer class="site-footer">
-  <a class="footer-brand" href="https://www.agenticdraft.dev/"><img src="../assets/agenticdraft-mark.png" alt="" width="36" height="36"><span>AgenticDraft</span></a>
+  <a class="footer-brand" href="https://www.agenticdraft.dev/" target="_blank" rel="noopener noreferrer"><img src="../assets/agenticdraft-mark.png" alt="" width="36" height="36"><span>AgenticDraft</span></a>
   <nav class="footer-links" aria-label="Footer">
-    <a href="https://www.agenticdraft.dev/">agenticdraft.dev</a>
-    <a href="https://www.linkedin.com/in/zoranzokimarkovic/">LinkedIn · Zoran Markovic</a>
-    <a href="https://github.com/agenticDraft/plugins">Repo</a>
+    <a href="https://www.agenticdraft.dev/" target="_blank" rel="noopener noreferrer">agenticdraft.dev</a>
+    <a href="https://www.linkedin.com/in/zoranzokimarkovic/" target="_blank" rel="noopener noreferrer">LinkedIn · Zoran Markovic</a>
+    <a href="https://github.com/agenticDraft/plugins" target="_blank" rel="noopener noreferrer">Repo</a>
   </nav>
-  <p>&copy; 2026 AgenticDraft · <a href="https://github.com/agenticDraft/agentic-delivery-factory/blob/main/LICENSE">MIT License</a></p>
+  <p>&copy; 2026 AgenticDraft · <a href="https://github.com/agenticDraft/agentic-delivery-factory/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>

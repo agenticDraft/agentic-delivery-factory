@@ -135,6 +135,11 @@ h3 { margin: 0 0 .35rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -
 .shot svg { display: block; width: 100%; height: auto; }
 .shot.run svg { min-width: 900px; }
 .shot.route svg { min-width: 820px; }
+.shot.parts svg { min-width: 900px; }
+ol.edges { margin: 1.4rem 0 0; padding-left: 1.4rem; max-width: 80ch; }
+ol.edges li { margin: .45rem 0; color: var(--muted); }
+.more { margin: 1.6rem 0 0; color: var(--muted); font-size: 1rem; }
+.more a { color: var(--cyan); }
 .shot figcaption { margin-top: .9rem; max-width: 76ch; color: var(--muted); font-size: .95rem; }
 .scroll-hint { display: none; color: var(--dim); font: .74rem/1.5 var(--mono); margin: .5rem 0 0; }
 @media (max-width: 900px) { .scroll-hint { display: block; } }
@@ -223,6 +228,7 @@ pre.envelope .k { color: var(--cyan); }
   <nav class="site-nav" aria-label="Sections">
     <a href="#idea">The idea</a>
     <a href="#layers">Three layers</a>
+    <a href="#parts">The parts</a>
     <a href="#run">One run</a>
     <a href="#vocabulary">Vocabulary</a>
     <a href="#guidance">Guidance</a>
@@ -291,7 +297,95 @@ pre.envelope .k { color: var(--cyan); }
     </div>
   </section>
 
-  <section class="section" id="run">
+  <section class="section" id="parts">
+    <div class="section-head">
+      <p class="eyebrow">The parts</p>
+      <h2>Who talks to <em>whom</em></h2>
+      <p>Six parts and seven connections. The rule that holds them together: a stage's work never reaches the driver, only its five-line result does.</p>
+    </div>
+    <figure class="shot parts">
+      <div class="shot-label"><span>The parts of the delivery core</span><span>Numbers match the list below</span></div>
+      <div class="shot-frame">
+<svg viewBox="0 0 1100 500" role="img" aria-labelledby="pa-t pa-d" style="font-family:Manrope, Arial, sans-serif">
+<title id="pa-t">The parts of the delivery core</title>
+<desc id="pa-d">A host, a person or CI, starts the route driver. The driver calls core scripts for every check and decision; they answer with one line and an exit code. The driver starts one stage adapter from the platform pack per stage, as an isolated subagent; the adapter calls provider packs by role. The adapter reads the ticket's facts from the run context on disk and writes its five-line result there; the scripts judge that result and save run state. Once, right after readiness, the driver calls the scm provider itself to create the working branch. Contracts define every shape, and every part follows them.</desc>
+<defs>
+  <marker id="pah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ba7bd"/></marker>
+  <marker id="pac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#55e8ff"/></marker>
+  <marker id="pam" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b98cff"/></marker>
+  <marker id="pab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ffcf6e"/></marker>
+</defs>
+<rect x="20" y="16" width="1060" height="40" fill="none" stroke="#8391a8" stroke-dasharray="4 3"/>
+<text x="36" y="41" font-family="DM Mono, ui-monospace, monospace" font-size="11" fill="#9ba7bd" letter-spacing="1.4">CONTRACTS</text>
+<text x="140" y="41" font-size="12.5" fill="#f7f8fb">every shape is defined once: the result, the stages, the roles, the endings · every box below follows them</text>
+<path d="M470 110 V84 H965 V108" fill="none" stroke="#ffcf6e" stroke-width="1.4" stroke-dasharray="6 3" marker-end="url(#pab)"/>
+<circle cx="560" cy="84" r="9" fill="#071020" stroke="#ffcf6e"/><text x="560" y="88" font-size="11" fill="#ffcf6e" text-anchor="middle" font-weight="600">7</text>
+<text x="576" y="78" font-family="DM Mono, ui-monospace, monospace" font-size="11" fill="#ffcf6e">create the working branch, once, right after readiness</text>
+<rect x="20" y="110" width="200" height="80" fill="#0a1427" stroke="#9ba7bd" stroke-width="1.2"/>
+<text x="34" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#9ba7bd" letter-spacing="1.4">HOST</text>
+<text x="34" y="156" font-size="13" fill="#f7f8fb">a person, interactive</text>
+<text x="34" y="176" font-size="13" fill="#f7f8fb">or CI, headless</text>
+<rect x="290" y="110" width="230" height="80" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.4"/>
+<text x="304" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#b98cff" letter-spacing="1.4">ROUTE DRIVER · ONE SKILL</text>
+<text x="304" y="156" font-size="14" font-weight="600" fill="#f7f8fb">control flow only</text>
+<text x="304" y="176" font-size="12" fill="#9ba7bd">the only part that starts a stage</text>
+<rect x="600" y="110" width="210" height="80" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.4"/>
+<text x="614" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#b98cff" letter-spacing="1.4">PLATFORM PACK</text>
+<text x="614" y="156" font-size="14" font-weight="600" fill="#f7f8fb">stage adapter</text>
+<text x="614" y="176" font-size="12" fill="#9ba7bd">one per stage, isolated subagent</text>
+<rect x="870" y="110" width="210" height="80" fill="rgba(185,140,255,.12)" stroke="#b98cff" stroke-width="1.4"/>
+<text x="884" y="132" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#b98cff" letter-spacing="1.4">PROVIDER PACKS</text>
+<text x="884" y="156" font-size="14" font-weight="600" fill="#f7f8fb">one per role</text>
+<text x="884" y="176" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#9ba7bd">tracker scm design browser</text>
+<path d="M220 150 H286" fill="none" stroke="#9ba7bd" stroke-width="1.3" marker-end="url(#pah)"/>
+<circle cx="253" cy="150" r="9" fill="#071020" stroke="#9ba7bd"/><text x="253" y="154" font-size="11" fill="#9ba7bd" text-anchor="middle" font-weight="600">1</text>
+<path d="M520 150 H596" fill="none" stroke="#b98cff" stroke-width="1.5" marker-end="url(#pam)"/>
+<circle cx="558" cy="150" r="9" fill="#071020" stroke="#b98cff"/><text x="558" y="154" font-size="11" fill="#b98cff" text-anchor="middle" font-weight="600">3</text>
+<path d="M810 150 H866" fill="none" stroke="#b98cff" stroke-width="1.5" marker-end="url(#pam)"/>
+<circle cx="838" cy="150" r="9" fill="#071020" stroke="#b98cff"/><text x="838" y="154" font-size="11" fill="#b98cff" text-anchor="middle" font-weight="600">4</text>
+<rect x="290" y="260" width="230" height="80" fill="rgba(85,232,255,.08)" stroke="#55e8ff" stroke-width="1.4"/>
+<text x="304" y="282" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#55e8ff" letter-spacing="1.4">CORE SCRIPTS · NO MODEL</text>
+<text x="304" y="306" font-size="14" font-weight="600" fill="#f7f8fb">every check and decision</text>
+<text x="304" y="326" font-family="DM Mono, ui-monospace, monospace" font-size="10.5" fill="#9ba7bd">file in, one line + exit code out</text>
+<path d="M405 190 V256" fill="none" stroke="#55e8ff" stroke-width="1.4" marker-end="url(#pac)"/>
+<circle cx="405" cy="223" r="9" fill="#071020" stroke="#55e8ff"/><text x="405" y="227" font-size="11" fill="#55e8ff" text-anchor="middle" font-weight="600">2</text>
+<text x="422" y="227" font-size="11.5" fill="#9ba7bd">calls, reads one line back</text>
+<rect x="20" y="400" width="1060" height="62" fill="rgba(156,182,226,.05)" stroke="#9ba7bd"/>
+<text x="36" y="422" font-family="DM Mono, ui-monospace, monospace" font-size="10" fill="#9ba7bd" letter-spacing="1.4">RUN CONTEXT · ON DISK, IN THE PROJECT</text>
+<text x="36" y="446" font-size="12.5" fill="#f7f8fb">the ticket's facts, recorded once · one five-line result per stage · run state, so a run can resume</text>
+<path d="M405 340 V396" fill="none" stroke="#55e8ff" stroke-width="1.4" marker-end="url(#pac)"/>
+<circle cx="405" cy="368" r="9" fill="#071020" stroke="#55e8ff"/><text x="405" y="372" font-size="11" fill="#55e8ff" text-anchor="middle" font-weight="600">6</text>
+<text x="422" y="372" font-size="11.5" fill="#9ba7bd">judge results, save run state</text>
+<path d="M705 190 V396" fill="none" stroke="#b98cff" stroke-width="1.4" marker-end="url(#pam)"/>
+<circle cx="705" cy="290" r="9" fill="#071020" stroke="#b98cff"/><text x="705" y="294" font-size="11" fill="#b98cff" text-anchor="middle" font-weight="600">5</text>
+<text x="722" y="286" font-size="11.5" fill="#9ba7bd">reads the facts,</text>
+<text x="722" y="301" font-size="11.5" fill="#9ba7bd">writes its own result</text>
+<text x="20" y="490" font-size="11.5" fill="#8391a8">The driver never reads what a stage wrote. It learns a stage's result only through the scripts, from the result file.</text>
+</svg>
+      </div>
+      <p class="scroll-hint">Scroll the figure sideways to see every part.</p>
+      <div class="key">
+        <span><i class="sw det"></i>Deterministic code decides</span>
+        <span><i class="sw mod"></i>A model works</span>
+        <span><i class="sw br"></i>Only after <code>readiness</code></span>
+      </div>
+    </figure>
+    <ol class="edges">
+      <li><strong>Host → driver.</strong> One command starts a run, typed by a person or run by CI. A model never starts a run on its own.</li>
+      <li><strong>Driver → scripts.</strong> Every check and every decision about what comes next. A script answers with one line and an exit code, and the driver branches on the code.</li>
+      <li><strong>Driver → stage adapter.</strong> One stage at a time, each as an isolated subagent. Whatever the stage read ends with it.</li>
+      <li><strong>Adapter → provider packs.</strong> By role, never by product. Project config binds each role to one pack, so swapping Jira for another tracker touches no core file.</li>
+      <li><strong>Adapter → run context.</strong> It reads the facts <code>intake</code> recorded about the ticket and ends by writing its five-line result. Its chat reply is ignored.</li>
+      <li><strong>Scripts → run context.</strong> They judge the result file and save run state after every stage.</li>
+      <li><strong>Driver → scm provider, once.</strong> Right after <code>readiness</code> the driver creates the working branch. It is the only provider call the driver makes itself, apart from posting a note to the tracker when an unattended run ends <code>blocked</code>.</li>
+    </ol>
+    <div class="note">
+      <p><strong>Two hosts, one driver.</strong> A person runs the command in Claude Code, or CI runs it headless. The headless runner adds guardrails, not orchestration: no permission prompts and a tool allowlist, forbidden calls blocked again in a hook that covers subagents, a locked network, a write-protected plugin directory, and caps on turns, time and budget. An interactive run proves the orchestration; only a headless run proves the guardrails.</p>
+    </div>
+    <p class="more">Developer level, with every script, file, exit and where a change belongs: <a class="pl" href="../how-it-runs/">How the delivery core runs →</a></p>
+  </section>
+
+  <section class="section alt" id="run">
     <div class="section-head">
       <p class="eyebrow">One run, step by step</p>
       <h2>What happens between <em>command</em> and pull request</h2>
@@ -404,7 +498,7 @@ pre.envelope .k { color: var(--cyan); }
     </figure>
   </section>
 
-  <section class="section alt" id="vocabulary">
+  <section class="section" id="vocabulary">
     <div class="section-head">
       <p class="eyebrow">The core's vocabulary</p>
       <h2>Everything the core <em>knows</em></h2>
@@ -466,7 +560,7 @@ pre.envelope .k { color: var(--cyan); }
     </div>
   </section>
 
-  <section class="section" id="guidance">
+  <section class="section alt" id="guidance">
     <div class="section-head">
       <p class="eyebrow">Design against published guidance</p>
       <h2>How it lines up with <em>Anthropic's</em> advice</h2>
@@ -478,6 +572,7 @@ pre.envelope .k { color: var(--cyan); }
       <div class="pair"><div><strong>Scripts before any model.</strong> Deterministic checks run first and cost nothing; a reviewing model sees only what survives.</div><div>Grade with code first and with a model only where code cannot decide.<span class="src"><a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals</a></span></div></div>
       <div class="pair"><div><strong>One isolated agent per stage.</strong> The driver's context grows by five lines per stage, never by what a stage read.</div><div>A subagent works in its own context window and hands back a condensed result.<span class="src"><a href="https://www.anthropic.com/engineering/multi-agent-research-system">Multi-agent research system</a></span></div></div>
       <div class="pair"><div><strong>The human decides.</strong> Three gates, and a question asked only between stages.</div><div>Keep a person in the loop for decisions that are costly to get wrong.<span class="src"><a href="https://www.anthropic.com/research/building-effective-agents">Building effective agents</a></span></div></div>
+      <div class="pair"><div><strong>Guardrails in the host.</strong> A headless run has no permission prompts, a tool allowlist, hooks, a locked network and caps, all set outside the model.</div><div>Make the application enforce its limits, so a manipulated model still cannot act outside them.<span class="src"><a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks">Mitigate jailbreaks and prompt injections</a></span></div></div>
       <div class="pair"><div><strong>Tickets are untrusted input.</strong> <code>intake</code> cleans the item before anything acts on it.</div><div>Treat content the agent reads, such as tickets and documents, as data, never as instructions.<span class="src"><a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks">Mitigate jailbreaks and prompt injections</a></span></div></div>
     </div>
   </section>
@@ -604,8 +699,8 @@ pre.envelope .k { color: var(--cyan); }
   </section>
 </main>
 
-<div class="page-note"><p>Read from <code>agentic-core</code> 0.2.18 and <code>agentic-eds</code> 0.2.14 on <code>main</code>.</p>
-  <p><a class="pl" href="../">All parts</a> · <a class="pl" href="https://github.com/agenticDraft/plugins">Repo</a></p></div>
+<div class="page-note"><p>Read from <code>agentic-core</code> 0.2.19 and <code>agentic-eds</code> 0.2.14 on <code>main</code>.</p>
+  <p><a class="pl" href="../how-it-runs/">Developer guide</a> · <a class="pl" href="../">All parts</a> · <a class="pl" href="https://github.com/agenticDraft/plugins">Repo</a></p></div>
 <footer class="site-footer">
   <a class="footer-brand" href="https://www.agenticdraft.dev/"><img src="../assets/agenticdraft-mark.png" alt="" width="36" height="36"><span>AgenticDraft</span></a>
   <nav class="footer-links" aria-label="Footer">

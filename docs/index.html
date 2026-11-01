@@ -21,6 +21,7 @@ ol > li > a:focus-visible { outline:3px solid var(--cyan); outline-offset:2px; }
 .part { color:var(--cyan); font:.85rem/1.9 var(--mono); }
 .t { font-weight:700; font-size:1.15rem; letter-spacing:-.02em; }
 .s { display:block; color:var(--muted); font-size:.98rem; }
+.k { margin-left:.6rem; color:var(--cyan); font:500 .85rem/1.5 var(--mono); white-space:nowrap; }
 @media (max-width:560px) { ol > li > a { grid-template-columns:minmax(0,1fr); gap:.2rem; } }
 .layout { display:grid; grid-template-columns:minmax(0,56rem) minmax(0,26rem); gap:clamp(2rem,5vw,4.5rem); align-items:start; }
 .layout > * { min-width:0; }
@@ -57,7 +58,8 @@ ol > li > a:focus-visible { outline:3px solid var(--cyan); outline-offset:2px; }
 <p class="lede">One ticket followed through one run of an agentic delivery pipeline, from Jira to a pull request. Repo: <a style="text-decoration:underline" href="https://github.com/agenticDraft/plugins">https://github.com/agenticDraft/plugins</a></p>
 <div class="layout">
 <ol>
-  <li><a href="how-it-works/"><span class="part">Part 0</span><span><span class="t">Delivery core concept</span><span class="s">The idea in one page: a fixed route of isolated stages, scripts that decide, a person at the gates, and packs you can swap.</span></span></a></li>
+  <li><a href="how-it-works/"><span class="part">Part 0</span><span><span class="t">Delivery core concept</span><span class="k">How it works</span><span class="s">The idea in one page: a fixed route of isolated stages, scripts that decide, a person at the gates, and packs you can swap.</span></span></a></li>
+  <li><a href="how-it-runs/"><span class="part" aria-hidden="true"></span><span><span class="t">Delivery concept</span><span class="k">How it runs</span><span class="s">The same core at developer level: every script, file and exit, and where a change belongs.</span></span></a></li>
   <li><a href="part-1/"><span class="part">Part 1</span><span><span class="t">The orchestrator that never reads code</span><span class="s">Architecture: fifteen steps report up, the orchestrator reads five lines.</span></span></a></li>
   <li><a href="part-2/"><span class="part">Part 2</span><span><span class="t">The Jira part has no opinion</span><span class="s">Integration: the token stays off the command line, the stage decides what the ticket means.</span></span></a></li>
   <li><a href="part-3/"><span class="part">Part 3</span><span><span class="t">The Figma plugin, from design link to files</span><span class="s">Figma Extract: what the plugin calls, what its scripts decide, and when it passes, asks a human or stops.</span></span></a></li>

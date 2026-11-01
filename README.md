@@ -1,10 +1,10 @@
-# agentic-delivery-factory
+# agentic-delivery-factory documentation
 
 One Jira ticket, followed through one run of an agentic delivery pipeline, until it becomes a pull request.
 
 The pipeline is fifteen steps. The orchestrator never reads code: each step reports back in a short fixed result, and the orchestrator reads only that.
 
-This repo is the companion site to the [agentic-delivery plugins](https://github.com/agenticDraft/plugins). Each page walks through one part of the run:
+This repo is the companion site documentation to the [agentic-delivery plugins](https://github.com/agenticDraft/plugins). Each page walks through one part of the run:
 
 1. The orchestrator that never reads code
 2. The Jira part has no opinion

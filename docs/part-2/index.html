@@ -136,6 +136,26 @@ pre.envelope .k { color: var(--cyan); }
 .chapter.warn .chapter-marker { color: #ffcf6e; }
 .chapter p:last-child { margin: 0; max-width: var(--measure); color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
 
+.route { margin: 0 0 clamp(1.4rem, 3vw, 2rem); }
+.route-label { margin: 0 0 .7rem; color: var(--muted); font: .78rem/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.route-label b { color: var(--cyan); font-weight: 500; }
+.route ol { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
+.route li { padding: .3rem .6rem; border: 1px solid var(--line-strong); color: var(--muted); font: .85rem/1.4 var(--mono); }
+.route li.gate { border-color: rgba(85, 232, 255, .55); color: var(--cyan); }
+.route li.here { background: var(--cyan); border-color: var(--cyan); color: var(--navy); font-weight: 500; }
+
+.start-here { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 1.2rem clamp(2rem, 6vw, 5rem);
+  padding: clamp(2rem, 4vw, 2.8rem) var(--space-page); background: #e6edf7; color: var(--navy); }
+.start-here ::selection { background: var(--navy); color: #e6edf7; }
+.start-here .eyebrow { margin-bottom: .9rem; color: var(--navy); }
+.start-here p { max-width: var(--measure); margin: 0 0 .5rem; color: #3a4a66; font-size: 1.05rem; line-height: 1.65; }
+.start-here p.lead { color: var(--navy); font-size: clamp(1.15rem, 1.8vw, 1.35rem); font-weight: 700; letter-spacing: -.02em; }
+.start-here a.go { display: inline-flex; align-items: center; gap: .6rem; padding: .85rem 1.2rem; border: 1px solid var(--navy);
+  background: var(--navy); color: #f7f8fb; font: 500 .95rem/1.2 var(--mono); text-decoration: none; white-space: nowrap; transition: background .2s, color .2s; }
+.start-here a.go:hover { background: transparent; color: var(--navy); }
+.start-here a.go:focus-visible { outline-color: var(--navy); }
+@media (max-width: 760px) { .start-here { grid-template-columns: minmax(0, 1fr); } }
+
 .site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
   padding: 2.2rem var(--space-page, 0); color: var(--muted); background: var(--footer, transparent); border-top: 1px solid var(--line-strong, var(--line));
   font-size: .95rem; }
@@ -168,7 +188,7 @@ pre.envelope .k { color: var(--cyan); }
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Delivery Factory · Part 2</a>
+  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Agentic Delivery Factory</a>
   <nav class="site-nav" aria-label="Sections">
     <a href="#picture">The picture</a>
     <a href="#parts">The parts</a>
@@ -184,11 +204,24 @@ pre.envelope .k { color: var(--cyan); }
     <p class="eyebrow">Delivery Factory · Part 2 · Integration</p>
     <h1>The Jira part has <em>no opinion</em>.</h1>
     <p class="lede">The first stage of every run needs the ticket. The plugin that fetches it is built so small that every claim about it can be checked in the code: where the token goes, who says pass or fail, and who decides what the ticket means. Repo: <a class="pl" href="https://github.com/agenticDraft/plugins/tree/main/plugins/agentic-jira" target="_blank" rel="noopener noreferrer">agentic-jira</a></p>
+    <nav class="route" aria-label="The fifteen stages of the route">
+      <p class="route-label">We are here: <b>step 1 of 15</b>. Intake calls the Jira plugin; verify and deliver call the same tracker role later.</p>
+      <ol><li class="here" aria-current="step">intake</li><li class="gate">readiness</li><li>extract</li><li>conventions</li><li>serve</li><li>baseline</li><li>prototype</li><li>verify-design</li><li>plan</li><li class="gate">plan-gate</li><li>implement</li><li>verify</li><li>lint</li><li class="gate">publish-gate</li><li>deliver</li></ol>
+    </nav>
     <div class="proof">
       <p class="proof-label">Checked in <b>Code</b></p>
       <p>Everything on this page was read in the plugin's scripts, skills and manifest, not only in its README. Paths are relative to <code>plugins/jira/</code> unless said otherwise.</p>
     </div>
   </section>
+
+  <aside class="start-here" aria-label="Where it all begins">
+    <div>
+      <p class="eyebrow">Where it all begins</p>
+      <p class="lead">This page is one part of a series.</p>
+      <p>Agentic Delivery Factory follows one ticket through a fixed route of fifteen steps, from Jira to a validated pull request. Each part explains one step. Landed here first? Start at the beginning.</p>
+    </div>
+    <a class="go" href="../">Agentic Delivery Factory →</a>
+  </aside>
 
   <section class="section" id="picture">
     <figure class="shot">

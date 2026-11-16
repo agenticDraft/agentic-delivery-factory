@@ -137,6 +137,26 @@ pre.envelope .k { color: var(--cyan); }
 .chapter.warn .chapter-marker { color: #ffcf6e; }
 .chapter p:last-child { margin: 0; max-width: var(--measure); color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
 
+.route { margin: 0 0 clamp(1.4rem, 3vw, 2rem); }
+.route-label { margin: 0 0 .7rem; color: var(--muted); font: .78rem/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.route-label b { color: var(--cyan); font-weight: 500; }
+.route ol { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
+.route li { padding: .3rem .6rem; border: 1px solid var(--line-strong); color: var(--muted); font: .85rem/1.4 var(--mono); }
+.route li.gate { border-color: rgba(85, 232, 255, .55); color: var(--cyan); }
+.route li.here { background: var(--cyan); border-color: var(--cyan); color: var(--navy); font-weight: 500; }
+
+.start-here { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 1.2rem clamp(2rem, 6vw, 5rem);
+  padding: clamp(2rem, 4vw, 2.8rem) var(--space-page); background: #e6edf7; color: var(--navy); }
+.start-here ::selection { background: var(--navy); color: #e6edf7; }
+.start-here .eyebrow { margin-bottom: .9rem; color: var(--navy); }
+.start-here p { max-width: var(--measure); margin: 0 0 .5rem; color: #3a4a66; font-size: 1.05rem; line-height: 1.65; }
+.start-here p.lead { color: var(--navy); font-size: clamp(1.15rem, 1.8vw, 1.35rem); font-weight: 700; letter-spacing: -.02em; }
+.start-here a.go { display: inline-flex; align-items: center; gap: .6rem; padding: .85rem 1.2rem; border: 1px solid var(--navy);
+  background: var(--navy); color: #f7f8fb; font: 500 .95rem/1.2 var(--mono); text-decoration: none; white-space: nowrap; transition: background .2s, color .2s; }
+.start-here a.go:hover { background: transparent; color: var(--navy); }
+.start-here a.go:focus-visible { outline-color: var(--navy); }
+@media (max-width: 760px) { .start-here { grid-template-columns: minmax(0, 1fr); } }
+
 .site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
   padding: 2.2rem var(--space-page, 0); color: var(--muted); background: var(--footer, transparent); border-top: 1px solid var(--line-strong, var(--line));
   font-size: .95rem; }
@@ -169,7 +189,7 @@ pre.envelope .k { color: var(--cyan); }
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Delivery Factory · Part 6</a>
+  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Agentic Delivery Factory</a>
   <nav class="site-nav" aria-label="Sections">
     <a href="#picture">The picture</a>
     <a href="#prototype">Prototype</a>
@@ -186,11 +206,24 @@ pre.envelope .k { color: var(--cyan); }
     <p class="eyebrow">Delivery Factory · Part 6 · Prototype and Verify Design</p>
     <h1>A draft, <em>measured</em> against the design</h1>
     <p class="lede">Two steps of the EDS pack build and check a draft before the plan exists. <code>eds-prototype</code> writes the draft. <code>eds-verify-design</code> renders it in the browser role, compares it with the design reference, and edits the block's CSS within a fixed budget. This page follows both. Repo: <a class="pl" href="https://github.com/agenticDraft/plugins/tree/main/plugins/agentic-eds" target="_blank" rel="noopener noreferrer">agentic-eds</a></p>
+    <nav class="route" aria-label="The fifteen stages of the route">
+      <p class="route-label">We are here: <b>steps 7 and 8 of 15</b>. The three gates are outlined.</p>
+      <ol><li>intake</li><li class="gate">readiness</li><li>extract</li><li>conventions</li><li>serve</li><li>baseline</li><li class="here" aria-current="step">prototype</li><li class="here" aria-current="step">verify-design</li><li>plan</li><li class="gate">plan-gate</li><li>implement</li><li>verify</li><li>lint</li><li class="gate">publish-gate</li><li>deliver</li></ol>
+    </nav>
     <div class="proof">
       <p class="proof-label">Checked in <b>SKILL.md + scripts</b></p>
       <p>Read in the two <code>SKILL.md</code> files, <code>pack.yaml</code> and the scripts they call, in <code>agenticDraft/plugins</code>, folder <code>plugins/agentic-eds/</code>, tag <code>v0.2.12</code> and later. Paths are relative to that folder.</p>
     </div>
   </section>
+
+  <aside class="start-here" aria-label="Where it all begins">
+    <div>
+      <p class="eyebrow">Where it all begins</p>
+      <p class="lead">This page is one part of a series.</p>
+      <p>Agentic Delivery Factory follows one ticket through a fixed route of fifteen steps, from Jira to a validated pull request. Each part explains one step. Landed here first? Start at the beginning.</p>
+    </div>
+    <a class="go" href="../">Agentic Delivery Factory →</a>
+  </aside>
 
   <section class="section" id="picture">
     <figure class="shot">

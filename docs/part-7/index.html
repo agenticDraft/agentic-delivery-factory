@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plan and Plan Gate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Delivery Factory companion page, same world as the agentic-core page. One dark look on purpose:
+   navy ground, spectrum accents, square edges. The figure is drawn at 1200x627 so a screenshot is the post image. */
+:root {
+  color-scheme: dark;
+  --ink: #f7f8fb;
+  --muted: #9ba7bd;
+  --dim: #8391a8;
+  --navy: #071020;
+  --navy-2: #0a1427;
+  --navy-3: #081225;
+  --footer: #050c18;
+  --line: rgba(156, 182, 226, .16);
+  --line-strong: rgba(156, 182, 226, .26);
+  --cyan: #55e8ff;
+  --violet: #a96eff;
+  --red: #ff9a8f;
+  --spectrum: linear-gradient(110deg, var(--cyan), #75a0ff 58%, #c588ff);
+  --sans: "Manrope", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --space-page: clamp(1.25rem, 5vw, 4.5rem);
+  --space-section: clamp(3.5rem, 7vw, 6rem);
+  --measure: 62ch;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --code-fg: #cdd6e4;
+  --code-bg: rgba(156, 182, 226, .1);
+  --code-line: rgba(156, 182, 226, .18);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { box-sizing: border-box; max-width: 1280px; margin: 0 auto; background: var(--navy); color: var(--ink); font: 400 17px/1.65 var(--sans); }
+main, section, div, nav, ul, ol, li, p, h1, h2, h3, figure { min-width: 0; }
+p, h1, h2, h3, a, span, li { overflow-wrap: break-word; }
+a { color: inherit; }
+a.pl { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+::selection { background: var(--cyan); color: var(--navy); }
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
+h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { text-wrap: balance; }
+section[id] { scroll-margin-top: 90px; }
+code { font: .86em/1.4 var(--mono); color: var(--code-fg); background: var(--code-bg);
+  border: 1px solid var(--code-line); padding: .05em .35em; }
+strong { font-weight: 700; color: var(--ink); }
+
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; padding: 1.1rem var(--space-page);
+  background: rgba(7, 16, 32, .9); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: .7rem; font-weight: 700; font-size: 1.15rem;
+  letter-spacing: -.035em; text-decoration: none; }
+.brand-mark { width: 14px; height: 14px; background: var(--spectrum); transform: rotate(45deg); }
+.site-nav { display: flex; gap: 1.6rem; font-size: .98rem; overflow-x: auto; scrollbar-width: none; }
+.site-nav a { color: var(--muted); text-decoration: none; white-space: nowrap; transition: color .2s; }
+.site-nav a:hover { color: var(--ink); }
+
+.hero { position: relative; padding: clamp(3.5rem, 8vw, 6.5rem) var(--space-page) 0; isolation: isolate;
+  border-bottom: 1px solid rgba(156, 182, 226, .28); overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -2;
+  background: linear-gradient(180deg, rgba(85, 140, 255, .045), transparent 42%); }
+.hero-glow { position: absolute; z-index: -1; width: 50vw; max-width: 100%; aspect-ratio: 1; left: -20vw; top: 2rem;
+  border-radius: 50%; background: radial-gradient(circle, rgba(55, 135, 255, .16), transparent 65%); filter: blur(16px); }
+.eyebrow { display: flex; align-items: center; gap: .8rem; margin: 0 0 1.2rem; font: 500 .8rem/1.45 var(--mono);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.eyebrow::before { content: ""; flex: none; width: 36px; height: 2px; background: var(--spectrum); }
+h1 { margin-bottom: 1.4rem; font-size: clamp(2.6rem, 6.5vw, 5rem); line-height: 1.02; letter-spacing: -.045em; font-weight: 600; }
+h1 em, h2 em { font-style: normal; color: var(--cyan); }
+.lede { max-width: var(--measure); color: var(--muted); font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.6;
+  letter-spacing: -.012em; margin-bottom: clamp(1.4rem, 3vw, 2rem); }
+.proof { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: .6rem 2rem; align-items: baseline;
+  margin-inline: calc(var(--space-page) * -1); margin-top: clamp(2rem, 4vw, 3rem); padding: 1.35rem var(--space-page);
+  border-top: 1px solid rgba(156, 182, 226, .25); background: var(--navy-2); }
+.proof-label { margin: 0; color: var(--muted); font: .78rem/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.proof-label b { display: inline-block; margin-left: .5rem; padding: .25rem .5rem; color: var(--navy); background: var(--cyan);
+  font-weight: 500; letter-spacing: .08em; }
+.proof p:last-child { margin: 0; max-width: 78ch; color: var(--muted); font-size: .98rem; line-height: 1.6; }
+
+.section { padding: var(--space-section) var(--space-page); border-top: 1px solid var(--line); }
+.section.alt { background: var(--navy-3); }
+.section-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); column-gap: clamp(2rem, 6vw, 6rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem); }
+.section-head .eyebrow { grid-column: 1 / -1; }
+h2 { margin-bottom: 0; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.05; letter-spacing: -.04em; font-weight: 600; }
+.section-head > p:last-child { align-self: end; max-width: 46ch; margin: 0; color: var(--muted); font-size: 1.1rem; line-height: 1.65; }
+.prose { max-width: var(--measure); }
+.prose p { color: var(--muted); }
+.claim { margin: clamp(1.8rem, 3vw, 2.4rem) 0 0; padding: 1.1rem 1.3rem; border-left: 3px solid var(--cyan);
+  background: rgba(85, 232, 255, .06); font-size: clamp(1.1rem, 1.8vw, 1.35rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.4; max-width: 56ch; }
+
+.shot { margin: 0; }
+.shot-label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem 2rem; margin-bottom: .8rem;
+  color: var(--dim); font: .74rem/1.5 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+.shot-frame { overflow-x: auto; border: 1px solid rgba(156, 182, 226, .22); }
+.shot svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.shot figcaption { margin-top: .9rem; max-width: 72ch; color: var(--muted); font-size: .95rem; }
+
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.compare > div { background: var(--navy); padding: 1.5rem 1.4rem; }
+.compare h3 { margin: 0 0 .2rem; font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; }
+.compare .tag { display: block; margin-bottom: 1rem; font: .74rem/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.compare .bad .tag { color: var(--red); }
+.compare .good .tag { color: var(--cyan); }
+.compare ul { margin: 0; padding-left: 1.1rem; color: var(--muted); display: grid; gap: .45rem; }
+
+pre.envelope { margin: 0; padding: 1.3rem 1.4rem; background: var(--navy-2); border: 1px solid rgba(85, 232, 255, .3);
+  color: var(--code-fg); font: .95rem/1.7 var(--mono); overflow-x: auto; }
+pre.envelope .k { color: var(--cyan); }
+.envelope-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: start; }
+
+.rows { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 1.1rem; padding: 1.3rem .5rem;
+  border-bottom: 1px solid rgba(156, 182, 226, .2); transition: background .25s var(--ease-out); }
+.row:hover { background: linear-gradient(90deg, rgba(85, 232, 255, .07), rgba(169, 110, 255, .04)); }
+.row::before { content: ""; width: 12px; height: 12px; margin: .45rem 0 0 4px; border: 1.5px solid rgba(156, 182, 226, .6);
+  background: var(--navy); transform: rotate(45deg); }
+.row.key::before { border-color: var(--ink); background: var(--ink); }
+.row h3 { margin: 0 0 .3rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
+.row p { margin: 0; max-width: 72ch; color: var(--muted); font-size: 1rem; line-height: 1.62; }
+
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; border-top: 1px solid var(--line); }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 1rem; padding: .95rem .5rem;
+  border-bottom: 1px solid rgba(156, 182, 226, .2); color: var(--muted); }
+.steps li::before { content: counter(s, decimal-leading-zero); color: var(--cyan); font: .85rem/1.9 var(--mono); }
+.steps li.read { color: var(--ink); }
+
+.chapters { margin: 0; padding: 0; list-style: none; }
+.chapter { display: grid; grid-template-columns: minmax(150px, .28fr) minmax(0, 1fr); gap: clamp(1rem, 4vw, 3rem);
+  padding: 1.3rem 0; border-top: 1px solid var(--line); }
+.chapter-marker { margin: .2rem 0 0; color: var(--cyan); font: .8rem/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.chapter.warn .chapter-marker { color: #ffcf6e; }
+.chapter p:last-child { margin: 0; max-width: var(--measure); color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
+
+.route { margin: 0 0 clamp(1.4rem, 3vw, 2rem); }
+.route-label { margin: 0 0 .7rem; color: var(--muted); font: .78rem/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.route-label b { color: var(--cyan); font-weight: 500; }
+.route ol { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
+.route li { padding: .3rem .6rem; border: 1px solid var(--line-strong); color: var(--muted); font: .85rem/1.4 var(--mono); }
+.route li.gate { border-color: rgba(85, 232, 255, .55); color: var(--cyan); }
+.route li.here { background: var(--cyan); border-color: var(--cyan); color: var(--navy); font-weight: 500; }
+
+.start-here { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 1.2rem clamp(2rem, 6vw, 5rem);
+  padding: clamp(2rem, 4vw, 2.8rem) var(--space-page); background: #e6edf7; color: var(--navy); }
+.start-here ::selection { background: var(--navy); color: #e6edf7; }
+.start-here .eyebrow { margin-bottom: .9rem; color: var(--navy); }
+.start-here p { max-width: var(--measure); margin: 0 0 .5rem; color: #3a4a66; font-size: 1.05rem; line-height: 1.65; }
+.start-here p.lead { color: var(--navy); font-size: clamp(1.15rem, 1.8vw, 1.35rem); font-weight: 700; letter-spacing: -.02em; }
+.start-here a.go { display: inline-flex; align-items: center; gap: .6rem; padding: .85rem 1.2rem; border: 1px solid var(--navy);
+  background: var(--navy); color: #f7f8fb; font: 500 .95rem/1.2 var(--mono); text-decoration: none; white-space: nowrap; transition: background .2s, color .2s; }
+.start-here a.go:hover { background: transparent; color: var(--navy); }
+.start-here a.go:focus-visible { outline-color: var(--navy); }
+@media (max-width: 760px) { .start-here { grid-template-columns: minmax(0, 1fr); } }
+
+.site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem;
+  padding: 2.2rem var(--space-page, 0); color: var(--muted); background: var(--footer, transparent); border-top: 1px solid var(--line-strong, var(--line));
+  font-size: .95rem; }
+.site-footer p { margin: 0; }
+.site-footer a { color: inherit; text-decoration: none; }
+.site-footer a:hover { color: var(--ink); text-decoration: underline; }
+.footer-brand { display: inline-flex; align-items: center; gap: .7rem; color: var(--ink); font-weight: 700; letter-spacing: -.02em; }
+.footer-brand img { width: 36px; height: 36px; object-fit: contain; border-radius: 8px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+.page-note { margin: 0; padding: 1.5rem var(--space-page, 0) 0; color: var(--muted); font-size: .95rem; }
+.page-note p { margin: 0 0 .5rem; max-width: 80ch; }
+
+@media (max-width: 860px) {
+  .section-head, .envelope-grid { grid-template-columns: minmax(0, 1fr); }
+  .section-head > p:last-child { margin-top: 1.2rem; }
+  .proof { grid-template-columns: minmax(0, 1fr); }
+  .chapter { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
+}
+@media (max-width: 640px) {
+  .site-header { flex-direction: column; align-items: flex-start; gap: .7rem; }
+  .site-nav { width: 100%; gap: 1.2rem; font-size: .92rem; }
+  .row, .steps li { padding-inline: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .row, .site-nav a { transition-duration: 0s; }
+}
+
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true"></span>Agentic Delivery Factory</a>
+  <nav class="site-nav" aria-label="Sections">
+    <a href="#picture">The picture</a>
+    <a href="#plan">Plan</a>
+    <a href="#file">The plan file</a>
+    <a href="#gate">Plan gate</a>
+    <a href="#guard">The guard</a>
+    <a href="#outcomes">Pass and stop</a>
+    <a href="#limits">What it doesn't cover</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <p class="eyebrow">Delivery Factory · Part 7 · Plan and Plan Gate</p>
+    <h1>A plan, <em>reviewed</em> before it is built</h1>
+    <p class="lede">Two steps of the EDS pack sit between the draft and the real change. <code>eds-plan</code> turns the ticket into requirements and steps. <code>eds-plan-gate</code> checks that plan with a script first and a separate reviewer second, and the route proves afterwards that the gate changed nothing. This page follows both. Repo: <a class="pl" href="https://github.com/agenticDraft/plugins/tree/main/plugins/agentic-eds" target="_blank" rel="noopener noreferrer">agentic-eds</a></p>
+    <nav class="route" aria-label="The fifteen stages of the route">
+      <p class="route-label">We are here: <b>steps 9 and 10 of 15</b>. The three gates are outlined.</p>
+      <ol><li>intake</li><li class="gate">readiness</li><li>extract</li><li>conventions</li><li>serve</li><li>baseline</li><li>prototype</li><li>verify-design</li><li class="here" aria-current="step">plan</li><li class="gate here" aria-current="step">plan-gate</li><li>implement</li><li>verify</li><li>lint</li><li class="gate">publish-gate</li><li>deliver</li></ol>
+    </nav>
+    <div class="proof">
+      <p class="proof-label">Checked in <b>SKILL.md + scripts</b></p>
+      <p>Read in the two <code>SKILL.md</code> files, <code>core/plan-criteria.md</code>, <code>agents/eds-gate-reviewer.md</code>, <code>pack.yaml</code> and the scripts they call, in <code>agenticDraft/plugins</code>, folder <code>plugins/agentic-eds/</code>, tag <code>v0.2.12</code> and later. The guard around the gate is in <code>agentic-core</code>'s <code>run-route</code>. Paths are relative to those folders.</p>
+    </div>
+  </section>
+
+  <aside class="start-here" aria-label="Where it all begins">
+    <div>
+      <p class="eyebrow">Where it all begins</p>
+      <p class="lead">This page is one part of a series.</p>
+      <p>Agentic Delivery Factory follows one ticket through a fixed route of fifteen steps, from Jira to a validated pull request. Each part explains one step. Landed here first? Start at the beginning.</p>
+    </div>
+    <a class="go" href="../">Agentic Delivery Factory →</a>
+  </aside>
+
+  <section class="section" id="picture">
+    <figure class="shot">
+      <div class="shot-label"><span>From spec to an approved plan</span><span>1200 × 627</span></div>
+      <div class="shot-frame">
+      <svg viewBox="0 0 1200 627" role="img" aria-label="The sanitized spec and the conventions artifact go into eds-plan, which derives requirements, drafts steps and checks the shape with a script, with one revision. It writes plan.yaml. The route snapshots the tree, then eds-plan-gate runs the same script, the design relevance check, and a reviewer in its own checkout that answers whether the order holds and whether each verification is defined. Findings that cannot name a step and what goes wrong are dropped. The route compares the tree. The result is pass, warn or fail." style="font-family:Manrope, Arial, sans-serif">
+        <defs>
+          <linearGradient id="q-sp" x1="0" x2="1"><stop offset="0" stop-color="#55e8ff"/><stop offset=".58" stop-color="#75a0ff"/><stop offset="1" stop-color="#c588ff"/></linearGradient>
+          <radialGradient id="q-glow" cx="0" cy="0" r="1"><stop offset="0" stop-color="#3787ff" stop-opacity=".16"/><stop offset="1" stop-color="#3787ff" stop-opacity="0"/></radialGradient>
+          <marker id="q-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ba7bd"/></marker>
+        </defs>
+        <rect width="1200" height="627" fill="#071020"/>
+        <rect width="760" height="627" fill="url(#q-glow)"/>
+        <rect x="56" y="46" width="36" height="2" fill="url(#q-sp)"/>
+        <text x="104" y="52" fill="#f7f8fb" font-family="DM Mono, monospace" font-size="13" letter-spacing="2.2">DELIVERY FACTORY · PART 7 · STEPS 9–10 OF 15</text>
+        <text x="56" y="104" fill="#f7f8fb" font-size="38" font-weight="700" letter-spacing="-1.4">A plan,</text>
+        <text x="56" y="148" fill="#55e8ff" font-size="38" font-weight="700" letter-spacing="-1.4">reviewed before it is built.</text>
+
+        <text x="56" y="188" fill="#8391a8" font-family="DM Mono, monospace" font-size="11" letter-spacing="1.6">EDS-PLAN WRITES THE PLAN</text>
+        <rect x="56" y="204" width="250" height="84" fill="#0a1427" stroke="rgba(156,182,226,.45)" stroke-width="1.4"/>
+        <text x="76" y="236" fill="#f7f8fb" font-size="17" font-weight="700">spec + conventions</text>
+        <text x="76" y="262" fill="#cdd6e4" font-size="13">written by earlier stages</text>
+        <rect x="346" y="204" width="250" height="84" fill="#0c1a33" stroke="#55e8ff" stroke-width="1.6"/>
+        <text x="366" y="236" fill="#55e8ff" font-family="DM Mono, monospace" font-size="14" font-weight="500">eds-plan</text>
+        <text x="366" y="262" fill="#cdd6e4" font-size="13">requirements → steps</text>
+        <rect x="636" y="204" width="250" height="84" fill="#0c1a33" stroke="#55e8ff" stroke-width="1.6"/>
+        <text x="656" y="236" fill="#55e8ff" font-family="DM Mono, monospace" font-size="14" font-weight="500">shape script</text>
+        <text x="656" y="262" fill="#cdd6e4" font-size="13">no? one revision</text>
+        <rect x="926" y="204" width="218" height="84" fill="#0a1427" stroke="rgba(156,182,226,.45)" stroke-width="1.4"/>
+        <text x="946" y="236" fill="#f7f8fb" font-size="17" font-weight="700">plan.yaml</text>
+        <text x="946" y="262" fill="#cdd6e4" font-size="13">order + checks in notes</text>
+        <line x1="308" y1="246" x2="342" y2="246" stroke="#9ba7bd" stroke-width="1.6" marker-end="url(#q-arr)"/>
+        <line x1="598" y1="246" x2="632" y2="246" stroke="#9ba7bd" stroke-width="1.6" marker-end="url(#q-arr)"/>
+        <line x1="888" y1="246" x2="922" y2="246" stroke="#9ba7bd" stroke-width="1.6" marker-end="url(#q-arr)"/>
+
+        <text x="56" y="330" fill="#8391a8" font-family="DM Mono, monospace" font-size="11" letter-spacing="1.6">EDS-PLAN-GATE REVIEWS IT · ROUTE SNAPSHOTS BEFORE, COMPARES AFTER</text>
+        <rect x="56" y="344" width="250" height="84" fill="#0c1a33" stroke="#55e8ff" stroke-width="1.6"/>
+        <text x="76" y="376" fill="#55e8ff" font-family="DM Mono, monospace" font-size="14" font-weight="500">scripts first</text>
+        <text x="76" y="402" fill="#cdd6e4" font-size="13">shape · design relevance</text>
+        <rect x="346" y="344" width="250" height="84" fill="#0c1a33" stroke="#a96eff" stroke-width="1.6"/>
+        <text x="366" y="376" fill="#c588ff" font-family="DM Mono, monospace" font-size="14" font-weight="500">reviewer</text>
+        <text x="366" y="402" fill="#cdd6e4" font-size="13">own checkout · order · checks</text>
+        <rect x="636" y="344" width="250" height="84" fill="#0a1427" stroke="rgba(156,182,226,.45)" stroke-width="1.4"/>
+        <text x="656" y="376" fill="#f7f8fb" font-size="17" font-weight="700">confidence bar</text>
+        <text x="656" y="402" fill="#cdd6e4" font-size="13">name it + what breaks, or drop</text>
+        <rect x="926" y="344" width="218" height="84" fill="#0a1427" stroke="rgba(156,182,226,.45)" stroke-width="1.4"/>
+        <text x="946" y="376" fill="#f7f8fb" font-size="17" font-weight="700">tree unchanged?</text>
+        <text x="946" y="402" fill="#cdd6e4" font-size="13">only report + result</text>
+        <line x1="308" y1="386" x2="342" y2="386" stroke="#9ba7bd" stroke-width="1.6" marker-end="url(#q-arr)"/>
+        <line x1="598" y1="386" x2="632" y2="386" stroke="#9ba7bd" stroke-width="1.6" marker-end="url(#q-arr)"/>
+        <line x1="888" y1="386" x2="922" y2="386" stroke="#9ba7bd" stroke-width="1.6" marker-end="url(#q-arr)"/>
+
+        <text x="56" y="470" fill="#8391a8" font-family="DM Mono, monospace" font-size="11" letter-spacing="1.6">ONE VERDICT, ALWAYS A RESULT BLOCK</text>
+        <rect x="56" y="484" width="250" height="84" fill="#0c1a33" stroke="#55e8ff" stroke-width="1.6"/>
+        <text x="76" y="512" fill="#55e8ff" font-family="DM Mono, monospace" font-size="12" letter-spacing="1.6">PASS</text>
+        <text x="76" y="536" fill="#f7f8fb" font-size="15" font-weight="700">four yes, no finding</text>
+        <rect x="346" y="484" width="250" height="84" fill="#0a1427" stroke="#ffcf6e" stroke-width="1.6"/>
+        <text x="366" y="512" fill="#ffcf6e" font-family="DM Mono, monospace" font-size="12" letter-spacing="1.6">WARN</text>
+        <text x="366" y="536" fill="#f7f8fb" font-size="15" font-weight="700">four yes, a finding recorded</text>
+        <rect x="636" y="484" width="250" height="84" fill="#0a1427" stroke="#ff9a8f" stroke-width="1.6"/>
+        <text x="656" y="512" fill="#ff9a8f" font-family="DM Mono, monospace" font-size="12" letter-spacing="1.6">FAIL</text>
+        <text x="656" y="536" fill="#f7f8fb" font-size="15" font-weight="700">any criterion answered no</text>
+        <rect x="56" y="584" width="50" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="63" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">intake</text>
+        <rect x="112" y="584" width="68" height="26" fill="#0a1427" stroke="rgba(85,232,255,.55)" stroke-width="1.2"/><text x="119" y="601" fill="#55e8ff" font-family="DM Mono, monospace" font-size="10">readiness</text>
+        <rect x="186" y="584" width="56" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="193" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">extract</text>
+        <rect x="248" y="584" width="81" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="255" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">conventions</text>
+        <rect x="335" y="584" width="44" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="342" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">serve</text>
+        <rect x="385" y="584" width="62" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="392" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">baseline</text>
+        <rect x="453" y="584" width="68" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="460" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">prototype</text>
+        <rect x="527" y="584" width="93" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="534" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">verify-design</text>
+        <rect x="626" y="584" width="38" height="26" fill="#55e8ff" stroke="#55e8ff" stroke-width="1.2"/><text x="633" y="601" fill="#071020" font-family="DM Mono, monospace" font-size="10" font-weight="500">plan</text>
+        <rect x="670" y="584" width="68" height="26" fill="#55e8ff" stroke="#55e8ff" stroke-width="1.2"/><text x="677" y="601" fill="#071020" font-family="DM Mono, monospace" font-size="10" font-weight="500">plan-gate</text>
+        <rect x="744" y="584" width="68" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="751" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">implement</text>
+        <rect x="818" y="584" width="50" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="825" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">verify</text>
+        <rect x="874" y="584" width="38" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="881" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">lint</text>
+        <rect x="918" y="584" width="87" height="26" fill="#0a1427" stroke="rgba(85,232,255,.55)" stroke-width="1.2"/><text x="925" y="601" fill="#55e8ff" font-family="DM Mono, monospace" font-size="10">publish-gate</text>
+        <rect x="1011" y="584" width="56" height="26" fill="#0a1427" stroke="rgba(156,182,226,.35)" stroke-width="1.2"/><text x="1018" y="601" fill="#9ba7bd" font-family="DM Mono, monospace" font-size="10">deliver</text>
+      </svg>
+      </div>
+      <figcaption>The plan step never reviews itself past the shape check. The gate never writes a plan of its own. The route, not the gate, proves the gate stayed read-only.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section alt" id="plan">
+    <div class="section-head">
+      <p class="eyebrow">Plan</p>
+      <h2>Requirements first, <em>steps</em> second</h2>
+      <p>The step always runs. It needs no tracker, scm, design or browser role: everything it reads was written by earlier stages.</p>
+    </div>
+    <ol class="steps">
+      <li><span>Read three fixed files: the fact record and the sanitized spec from <code>intake</code>, and <code>design-conventions.md</code> from <code>conventions</code>. Any of them missing or empty ends the step with <code>fail</code>: a missing artifact is a broken route, not a case to work around.</span></li>
+      <li><span>Copy a missing upstream block. <code>copy-upstream-blocks.sh</code> copies a block the item names that the pinned upstream collection holds and the project lacks. On a design route the prototype usually did this already, and it prints <code>copied=(none)</code>. The plan's steps are then changes on top of those files.</span></li>
+      <li class="read"><span>Derive requirements. The spec's requirement and acceptance-criteria text is split into atomic, testable statements, <code>req-1</code>, <code>req-2</code>, … in the order they appear. Two that say the same thing in other words are one. None at all: the step returns a question. It does not guess what "done" means.</span></li>
+      <li><span>Apply the conventions artifact. Its <code>## Exemplars</code> paths go into the plan's header for <code>implement</code> to open. The step does not survey the project itself: a gap in the artifact is a <code>conventions</code> bug to report, not one to paper over.</span></li>
+      <li><span>Draft the plan: one step per unit of concrete work, each naming the requirement ids it satisfies, with its dependency and its verification in comment lines.</span></li>
+      <li class="read"><span>Validate the shape. <code>check-plan-criteria.sh</code> answers two questions with no model involved: does every requirement map to a step, and does every step trace back to a requirement.</span></li>
+      <li><span>Revise if it says no. <code>check-fix-budget.sh</code> reads the stage's <code>fix_attempts</code> from the pack, which is <code>1</code> for <code>plan</code>: one revision, two checks. The revision fixes exactly the reason the script printed. Out of budget: <code>fail</code>, with the script's reason verbatim.</span></li>
+    </ol>
+    <p class="claim">The plan step does no research. The conventions step already surveyed the project, and re-deriving it here would let two answers drift apart.</p>
+  </section>
+
+  <section class="section" id="file">
+    <div class="section-head">
+      <p class="eyebrow">The plan file</p>
+      <h2>What the script reads, <em>what the reviewer reads</em></h2>
+      <p>One file, two readers. The script reads only <code>requirements:</code> and <code>stages:</code>. The comment lines are for the reviewer.</p>
+    </div>
+    <div class="envelope-grid">
+<pre class="envelope"><span class="k"># Implementation plan for &lt;item_id&gt;</span>
+<span class="k"># Conventions: &lt;exemplar paths, one-line note&gt;</span>
+
+requirements:
+  - req-1
+  <span class="k"># req-1: &lt;one-line restatement&gt;</span>
+  - req-2
+stages:
+  - id: &lt;step-id&gt;
+    satisfies: [req-1]
+    <span class="k"># depends_on: none</span>
+    <span class="k"># verification: &lt;how it is confirmed&gt;</span>
+  - id: &lt;step-id&gt;
+    satisfies: [req-2]
+    <span class="k"># depends_on: &lt;step-id&gt;</span>
+    <span class="k"># verification: &lt;how it is confirmed&gt;</span></pre>
+      <div class="prose">
+        <p><strong>The shape is the contract.</strong> <code>plan-criteria.md</code> fixes only the two fields the script consumes: the closed list of requirements, and each step's <code>satisfies</code> list. Everything else a plan carries is for the reviewer.</p>
+        <p><strong>What the script rejects.</strong> A requirement no step satisfies. A step whose <code>satisfies</code> list is empty, or names only requirement ids that do not exist. Two requirements with the same id. It exits <code>0</code> with <code>valid: plan (&lt;n&gt; requirements, &lt;m&gt; stages)</code>, or <code>1</code> with <code>invalid:</code> and the exact requirement or step.</p>
+        <p><strong>Plan steps are not route stages.</strong> A step is the unit of work between <code>plan</code> and <code>implement</code>, and its id must not reuse one of the fifteen stage ids.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="gate">
+    <div class="section-head">
+      <p class="eyebrow">Plan gate</p>
+      <h2>A script first, a <em>reviewer</em> second</h2>
+      <p>The stage runs as <code>eds-gate-reviewer</code>: model <code>opus</code>, effort <code>high</code>, in a worktree of its own. It reviews and never fixes.</p>
+    </div>
+    <ol class="steps">
+      <li><span>Check isolation. <code>check-gate-isolation.sh</code> compares the stage's working directory with the <code>project_root</code> the route handed it and prints <code>isolation: present</code> or <code>absent</code>. That line goes into the report as information. It never changes the verdict.</span></li>
+      <li><span>Locate the run context. A worktree holds tracked files only, so the plan is not in it. The route passes the project root as an argument, and the gate first proves the plan belongs to this run: the fact record's item id must equal the plan's.</span></li>
+      <li class="read"><span>Run the same shape script as <code>plan</code>. Exit <code>1</code> is criterion 1 or 2 answered no. Exit <code>2</code> means the script could not decide, and that is a <code>fail</code> too: "did not run" is never read as "passed".</span></li>
+      <li><span>Run the design relevance check. <code>check-design-relevance.sh</code> compares the item's keywords with the element names in the design. No shared name: one finding, at most <code>warn</code>. No design reference: <code>not run</code>, no finding.</span></li>
+      <li class="read"><span>Criterion 3, does the dependency order hold? No when a step depends on a later step or one not in the plan, when two steps depend on each other, or when a step says <code>depends_on: none</code> but edits a unit that does not exist yet and no earlier step creates.</span></li>
+      <li class="read"><span>Criterion 4, is the verification defined? No when a requirement has no step with a verification note, when the note restates the requirement ("works as specified" can never fail), or when it names a command or path this checkout does not have.</span></li>
+      <li><span>Drop every finding below the bar. A finding stays only if it names the exact requirement, step or path, and what goes wrong if the plan is built as written. The rest is dropped, not softened with "possibly".</span></li>
+    </ol>
+    <p class="claim">A criterion has two answers and no third. "Mostly holds" is the answer of a gate that cannot fail.</p>
+  </section>
+
+  <section class="section" id="guard">
+    <div class="section-head">
+      <p class="eyebrow">The guard</p>
+      <h2>The route proves the gate <em>changed nothing</em></h2>
+      <p>The worktree should keep the reviewer away from the code under review. The harness does not always honour that, and nothing says when it doesn't.</p>
+    </div>
+    <div class="envelope-grid">
+      <div class="prose">
+        <p><strong>Snapshot before.</strong> Before it invokes a gate, the route runs <code>check-tree-unchanged.sh snapshot</code>. It records <code>HEAD</code> and every path <code>git status</code> reports, with a hash of each file's content. A file already changed before the gate, the change under review, is part of the snapshot.</p>
+        <p><strong>Compare after.</strong> When the gate returns, the route compares, allowing exactly two paths: the gate's report and its result block. Anything else changed, and the run ends <code>failed</code> on that stage, whatever its verdict said. The route does not even read the verdict.</p>
+        <p>A gate that ran without isolation but changed nothing passes the guard. Running unisolated never lowers a verdict on its own. See <a class="pl" href="../how-it-runs/">How it runs</a>.</p>
+      </div>
+<pre class="envelope"><span class="k"># plan-gate-report.md, its shape</span>
+# plan-gate report — &lt;item id&gt;
+
+verdict: &lt;verdict&gt;
+isolation: present | absent
+relevance: match | low | not run (…)
+
+## Criteria
+1. yes | no | not reached — &lt;what settles it&gt;
+2. …
+3. …
+4. …
+
+## Findings
+- &lt;req, step or path&gt; — &lt;what goes wrong&gt;</pre>
+    </div>
+  </section>
+
+  <section class="section alt" id="outcomes">
+    <div class="section-head">
+      <p class="eyebrow">Pass and stop</p>
+      <h2>Each verdict, <em>and who decides it</em></h2>
+      <p>Both steps end in the same result block the route reads. The route never retries a stage.</p>
+    </div>
+    <ul class="chapters">
+      <li class="chapter"><p class="chapter-marker">Plan · pass</p><p>The shape script exits <code>0</code>, on the first check or after the one revision. The result names the item and how many requirements the plan covers, nothing more. The detail is in <code>plan.yaml</code>.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Plan · question</p><p>The spec carries no requirement or acceptance criterion to plan from. The driver asks a person and re-invokes the stage once with the answer. In an autonomous run it ends the run <code>blocked</code> instead.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Plan · fail</p><p>A required file is missing, the upstream copy script refuses, or the shape script still says no after the revision.</p></li>
+      <li class="chapter"><p class="chapter-marker">Gate · pass</p><p>All four criteria answered yes, and the report's findings say <code>None.</code></p></li>
+      <li class="chapter warn"><p class="chapter-marker">Gate · warn</p><p>All four answered yes, but at least one finding cleared the bar. A low design relevance score is one example. The run continues and the finding is recorded.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Gate · fail</p><p>Criterion 3 or 4 answered no; or the shape script exits <code>1</code> or <code>2</code>; or the relevance check cannot run; or the plan is missing or belongs to another run. The plan gate never asks a question.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Route · failed</p><p>The gate changed any file other than its report and result block. The route names every changed path.</p></li>
+    </ul>
+  </section>
+
+  <section class="section" id="limits">
+    <div class="section-head">
+      <p class="eyebrow">What it doesn't cover</p>
+      <h2>The limits, <em>as stated</em></h2>
+      <p>From the two SKILL.md files and the criteria contract.</p>
+    </div>
+    <ul class="chapters">
+      <li class="chapter warn"><p class="chapter-marker">Best plan</p><p>The gate does not judge whether this is the best way to build the change. Its four questions are coverage, no extra work, order, and checkable verification.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Two by judgment</p><p>Criteria 3 and 4 are answered by a model. The bar it must clear is stated, and dropped impressions never reach the report, but the answer is still judgment, not a script.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Relevance</p><p>Design relevance compares names, not pictures. It can only raise a warning, never fail a plan, and it never reads the design's text content.</p></li>
+      <li class="chapter warn"><p class="chapter-marker">Ignored files</p><p>The tree guard sees what <code>git status</code> sees. Files ignored by version control are outside the snapshot.</p></li>
+      <li class="chapter"><p class="chapter-marker">Next</p><p>Implement, verify and lint.</p></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <a class="footer-brand" href="https://www.agenticdraft.dev/" target="_blank" rel="noopener noreferrer"><img src="../assets/agenticdraft-mark.png" alt="" width="36" height="36"><span>AgenticDraft</span></a>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="https://www.agenticdraft.dev/" target="_blank" rel="noopener noreferrer">agenticdraft.dev</a>
+    <a href="https://www.linkedin.com/in/zoranzokimarkovic/" target="_blank" rel="noopener noreferrer">LinkedIn · Zoran Markovic</a>
+    <a href="https://github.com/agenticDraft/plugins" target="_blank" rel="noopener noreferrer">Repo</a>
+  </nav>
+  <p>&copy; 2026 AgenticDraft · <a href="https://github.com/agenticDraft/agentic-delivery-factory/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a></p>
+</footer>
+
+</body>
+</html>
